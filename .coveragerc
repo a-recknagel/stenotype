@@ -1,0 +1,12 @@
+[run]
+branch = True
+source = stenotype
+omit =
+  */__init__.py
+
+[paths]
+source = src
+
+[report]
+fail_under = 80
+show_missing = True

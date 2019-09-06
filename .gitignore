@@ -1,0 +1,17 @@
+# binaries
+build
+dist
+wheels
+public
+
+# caches and tool artifacts
+docs/autodoc
+.mypy_cache
+.pytest_cache
+.coverage
+pip-wheel-metadata
+*.py[cod]
+*.egg-info
+
+# dev stuff
+.idea
