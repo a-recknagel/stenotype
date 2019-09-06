@@ -1,5 +1,8 @@
 stenotype
 =========
+.. image:: https://img.icons8.com/color/144/000000/typewriter-with-tablet.png
+   :alt: Project under construction, find an actual icon some time
+   :align: center
 
 
 .. header-end

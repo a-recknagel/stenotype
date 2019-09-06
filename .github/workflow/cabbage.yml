@@ -1,0 +1,130 @@
+name: Cabbage
+
+on: [push]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.6
+      volumes:
+        - /dist:/dist
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build with poetry
+      run: |
+        pip install poetry
+        poetry build
+        mv dist /dist
+    - uses: actions/upload-artifact@v1
+      with:
+        name: distributions
+        path: /dist
+
+  lint.black:
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3.6
+    steps:
+    - uses: actions/checkout@v1
+    - name: Make sure the project is black
+      run: |
+        pip install black
+        black src/ tests/ --check
+
+  lint.mypy:
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3.6
+    steps:
+    - uses: actions/checkout@v1
+    - name: Static typing test with mypy
+      run: |
+        pip install mypy
+        mypy src/
+
+  test.pytest:
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3.6
+      volumes:
+        - /dist:/dist
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/download-artifact@v1
+      with:
+        name: distributions
+        path: /dist
+    - name: Running test suite
+      run: |
+        pip install /dist/*.whl
+        pip install pytest pytest-sugar
+        pytest tests/
+
+  test.coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3.6
+      volumes:
+        - /dist:/dist
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/download-artifact@v1
+      with:
+        name: distributions
+        path: /dist
+    - name: Running test coverage
+      run: |
+        pip install /dist/*.whl
+        pip install pytest-cov
+        pytest tests/ --cov
+
+  security.safety:
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3.6
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test dependencies for known issues
+      run: |
+        pip install poetry==1.0.0a4  # FIXME: need pre-release for export
+        pip install safety
+        poetry export -f requirements.txt
+        safety check -r requirements.txt
+
+  security.bandit:
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3.6
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test source code for potential exploits
+      run: |
+        pip install bandit
+        bandit -r src
+
+  release.sphinx:
+    needs: [build, lint.black, lint.mypy, test.pytest, test.coverage,
+            security.safety, security.bandit]
+    runs-on: ubuntu-latest
+      container: python:3.6
+        volumes:
+          - /dist:/dist
+          - /public:/public
+      steps:
+        - uses: actions/checkout@v1
+        - uses: actions/download-artifact@v1
+          with:
+            name: distributions
+            path: /dist
+        - name: Running test coverage
+          run: |
+            pip install /dist/*.whl
+            pip install sphinx
+            sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
+            sphinx-build docs /public
+        - uses: actions/upload-artifact@v1
+          with:
+            name: documentation
+            path: /public

@@ -7,46 +7,6 @@ Tooling
 .. header-end
 
 
-Containerization
-~~~~~~~~~~~~~~~~
-
-Docker_ is used to ensure that the development and deployment environments
-are as similar as possible.
-If you want to run a high level/integration test of this project locally, you
-should do so using the docker image. Make sure `docker is installed`_ if it
-isn't already.
-
-If you depend on packages that are not `pure python wheels`_, you need to
-build the dependencies (after locking them with poetry) for alpine architecture:
-
-.. code-block:: bash
-
-  $ ./scripts/wheelhouse.sh
-
-This should generate a ``wheels/`` folder in the project root, which docker
-needs in order to be able to build the image locally:
-
-.. code-block:: bash
-
-  $ docker build -t stenotype .
-
-It's tagged it with the name ``'stenotype'``, just so it
-can be referred to it a little easier when running as a container:
-
-.. code-block:: bash
-
-  $ docker run stenotype
-
-This will execute the default entrypoint of the docker image.
-
-If you want to open a shell to the container in order to debug its environment,
-you can do so with
-
-.. code-block:: bash
-
-  $ docker run -it --entrypoint /bin/sh stenotype
-
-
 Packaging
 ~~~~~~~~~
 If you want to package the project without its dependencies, use the following
@@ -123,16 +83,8 @@ that your code didn't blow glaring security holes into the project.
 
 Coverage
 ~~~~~~~~
-Testing the coverage is a bit iffy and not always super reliable, but we try our
-best. Right now we only use unit tests to test the code, so using the
-`coverage.py`_ wrapper pytest-cov_ makes a lot of sense and means that the
-configuration is a lot easier.
-
-If at some point other test suite runners are used for
-smoke/functional/integration testing, we'll need to combine multiple calibrated
-runs with a bare coverage.py instead.
-
-Anyway, right now it's just:
+We use pytests to run the test suite, so using the `coverage.py`_ wrapper
+pytest-cov_ makes things quite simple:
 
 .. code-block:: bash
 

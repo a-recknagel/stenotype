@@ -17,6 +17,10 @@ extensions = [
 ]
 
 
+# -- Autodoc configuration ---------------------------------------------------
+autodoc_member_order = "bysource"
+
+
 # -- Options for HTML output -------------------------------------------------
 html_static_path = ['_static']
-html_logo = '_static/construction-64.png'
+html_logo = '_static/typewriter-48.png'
