@@ -3,7 +3,7 @@ from stenotype import __version__
 
 # -- Project information -----------------------------------------------------
 project = 'stenotype'
-copyright = '2019, auxmoney GmbH'
+copyright = '2019, Arne'
 author = 'Arne Recknagel'
 release = __version__
 
