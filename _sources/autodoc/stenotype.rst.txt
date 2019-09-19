@@ -1,0 +1,19 @@
+stenotype package
+=================
+
+.. automodule:: stenotype
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+stenotype.util module
+---------------------
+
+.. automodule:: stenotype.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

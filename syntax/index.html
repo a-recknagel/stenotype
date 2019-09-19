@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Syntax Definition &#8212; stenotype 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/flask.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+  <script>DOCUMENTATION_OPTIONS.URL_ROOT = '../';</script>
+   
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex/" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex/" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../">stenotype 0.1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="syntax-definition">
+<h1>Syntax Definition<a class="headerlink" href="#syntax-definition" title="Permalink to this headline">¶</a></h1>
+<p>Valid <code class="docutils literal notranslate"><span class="pre">stenotype</span></code> annotations will always cleanly map to regular type
+annotations. The conversion rules are collected in this document.</p>
+<div class="section" id="typing-types-equivalent-mappings">
+<h2><code class="docutils literal notranslate"><span class="pre">typing</span></code>-Types Equivalent Mappings<a class="headerlink" href="#typing-types-equivalent-mappings" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#the-any-type">Any</a></p>
+<p>Cases where you have to specify a type but do not want to place restrictions
+on it, you may use <code class="docutils literal notranslate"><span class="pre">object</span></code> or <cite>_</cite> instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+<span class="n">foo</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span>
+
+<span class="c1"># stenotype</span>
+<span class="n">foo</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+<span class="n">foo</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union">Union</a></p>
+<p>If a number of types are admissible for a single variable, just list them all
+with an <code class="docutils literal notranslate"><span class="pre">or</span></code> between them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+<span class="n">foo</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+
+<span class="c1"># stenotype</span>
+<span class="n">foo</span><span class="p">:</span> <span class="s2">&quot;int or float&quot;</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a></p>
+<p>A special case of <code class="docutils literal notranslate"><span class="pre">Union</span></code>, where the only other option besides some type for
+a variable is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+<span class="n">foo</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple">Tuple</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List">List</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set">Set</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TypeVar">TypeVar</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic">Generic</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://www.python.org/dev/peps/pep-0586/#id17">Literal</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef">ForwardRef</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># regular</span>
+
+<span class="c1"># stenotype</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+  <span id="sidebar-top"></span>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+    
+            <p class="logo"><a href="../">
+              <img class="logo" src="../_static/typewriter-48.png" alt="Logo"/>
+            </a></p>
+  
+
+  <h3>Contents</h3>
+  <ul>
+<li><a class="reference internal" href="#">Syntax Definition</a><ul>
+<li><a class="reference internal" href="#typing-types-equivalent-mappings"><code class="docutils literal notranslate"><span class="pre">typing</span></code>-Types Equivalent Mappings</a></li>
+</ul>
+</li>
+</ul>
+<h3>Navigation</h3>
+<ul>
+  <li><a href="../">Overview</a>
+    
+  </li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search/" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Arne.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  <script type="text/javascript" src="../_static/version_warning_offset.js"></script>
+
+  </body>
+</html>

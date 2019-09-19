@@ -1,0 +1,168 @@
+Syntax Definition
+-----------------
+
+Valid ``stenotype`` annotations will always cleanly map to regular type
+annotations. The conversion rules are collected in this document.
+
+``typing``-Types Equivalent Mappings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Any_
+
+Cases where you have to specify a type but do not want to place restrictions
+on it, you may use ``object`` or `_` instead:
+
+.. code-block:: python
+
+  # regular
+  foo: typing.Any
+
+  # stenotype
+  foo: "_"
+  foo: "object"
+
+----
+
+Union_
+
+If a number of types are admissible for a single variable, just list them all
+with an ``or`` between them.
+
+.. code-block:: python
+
+  # regular
+  foo: typing.Union[int, float]
+
+  # stenotype
+  foo: "int or float"
+
+----
+
+Optional_
+
+A special case of ``Union``, where the only other option besides some type for
+a variable is ``None``.
+
+.. code-block:: python
+
+  # regular
+  foo: typing.
+
+  # stenotype
+
+----
+
+Tuple_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+List_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+Dict_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+Set_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+Iterable_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+Callable_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+TypeVar_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+Generic_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+Literal_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+ForwardRef_
+
+.. code-block:: python
+
+  # regular
+
+  # stenotype
+
+----
+
+
+.. _Any: https://docs.python.org/3/library/typing.html#the-any-type
+.. _Union: https://docs.python.org/3/library/typing.html#typing.Union
+.. _Optional: https://docs.python.org/3/library/typing.html#typing.Optional
+.. _Tuple: https://docs.python.org/3/library/typing.html#typing.Tuple
+.. _List: https://docs.python.org/3/library/typing.html#typing.List
+.. _Dict: https://docs.python.org/3/library/typing.html#typing.Dict
+.. _Set: https://docs.python.org/3/library/typing.html#typing.Set
+.. _Iterable:  https://docs.python.org/3/library/typing.html#typing.Iterable
+.. _Callable: https://docs.python.org/3/library/typing.html#typing.Callable
+.. _TypeVar: https://docs.python.org/3/library/typing.html#typing.TypeVar
+.. _Generic: https://docs.python.org/3/library/typing.html#typing.Generic
+.. _Literal: https://www.python.org/dev/peps/pep-0586/#id17
+.. _ForwardRef: https://docs.python.org/3/library/typing.html#typing.ForwardRef
