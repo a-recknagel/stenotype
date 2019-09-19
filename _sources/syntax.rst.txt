@@ -4,11 +4,58 @@ Syntax Definition
 Valid ``stenotype`` annotations will always cleanly map to regular type
 annotations. The conversion rules are collected in this document.
 
+How to Annotate Functions and Variables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Function signature annotation was added with `PEP 3017`_ and properly defined
+in `PEP 484`_. This annotation is made up of two parts: The argument annotation
+and the return value annotation:
+
+.. code-block:: python
+
+  def foo(bar: Arg_1_Type, baz: Arg_2_Type) -> Return_Value_Type:
+      ...
+
+Variable annotation was added a little later with `PEP 526`_, and written as
+follows:
+
+.. code-block:: python
+
+  qux: Var_Type
+
+Since a function is just another object, it can also be annotation in this way.
+For example, the function from above could also have been annotated as follows:
+
+.. code-block:: python
+
+  from typing import Callable
+  foo: Callable[[Arg_1_Type, Arg_2_Type], Return_Value_Type]
+
+----
+
+This structure will remain as is. ``stenotype`` only influences the way types
+are expressed, not where they can be meaningfully used.
+
+All but the variable notation of function types will also stay structurally
+similar. Given the examples, they would change in the following ways:
+
+.. code-block:: python
+
+  # function signature notation
+  def foo(bar: "Arg_1_Type", baz: "Arg_2_Type") -> "Return_Value_Type":
+      ...
+
+  # variable notation of plain variables
+  qux: "Var_Type"
+
+  # variable notation of functions
+  foo: "(Arg_1_Type, Arg_2_Type) -> Return_Value_Type"
+
+
 ``typing``-Types Equivalent Mappings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Any_
-
+Any_:
 Cases where you have to specify a type but do not want to place restrictions
 on it, you may use ``object`` or `_` instead:
 
@@ -23,8 +70,7 @@ on it, you may use ``object`` or `_` instead:
 
 ----
 
-Union_
-
+Union_:
 If a number of types are admissible for a single variable, just list them all
 with an ``or`` between them.
 
@@ -38,51 +84,80 @@ with an ``or`` between them.
 
 ----
 
-Optional_
-
-A special case of ``Union``, where the only other option besides some type for
-a variable is ``None``.
-
-.. code-block:: python
-
-  # regular
-  foo: typing.
-
-  # stenotype
-
-----
-
-Tuple_
+Optional_:
+A special case of ``Union``, where the only other option besides the specified
+type for a variable is ``None``. ``stenotype`` prepends a question mark, which
+is what a few other languages allow as well.
 
 .. code-block:: python
 
   # regular
+  foo: typing.Optional[int]
 
   # stenotype
+  foo: "?int"
 
 ----
 
-List_
+Tuple_:
+Fixed size container where for every element present in it the correct type
+should be supplied. All containers should be specified by using their literal
+python notation equivalent.
 
 .. code-block:: python
 
   # regular
+  foo: typing.Tuple[int, str, float]
 
   # stenotype
+  foo: "(int, str, float)"
 
 ----
 
-Dict_
+List_:
+A typed list should only contain a single type. Use literal notation in
+``stenotype`` mode.
 
 .. code-block:: python
 
   # regular
+  foo: typing.List[int]
 
   # stenotype
+  foo: "[int]"
 
 ----
 
-Set_
+Dict_:
+A dictionary contains two arguments, one for the key types and one for the
+value types. Use literal notation in ``stenotype`` mode.
+
+.. code-block:: python
+
+  # regular
+  foo: typing.Dict[str, int]
+
+  # stenotype
+  foo: "{str: int}"
+
+----
+
+Set_:
+Set notation is identical to list notation, the difference between them is not
+relevant for annotation. Use literal notation in ``stenotype`` mode.
+
+.. code-block:: python
+
+  # regular
+  foo: typing.Set[int]
+
+  # stenotype
+  foo: "{int}"
+
+----
+
+Callable_:
+
 
 .. code-block:: python
 
@@ -94,21 +169,17 @@ Set_
 
 Iterable_
 
-.. code-block:: python
-
-  # regular
-
-  # stenotype
-
-----
-
-Callable_
+The Iterable interface is primarily used for variadic arguments in functions
+and for return types of generators. Use the `*` in either context when using
+``stenoype``.
 
 .. code-block:: python
 
   # regular
+  foo: typing.Callable[[str, typing.Iterable[int]], typing.Iterable[float]]
 
   # stenotype
+  foo: "(str, *int) -> *float"
 
 ----
 
@@ -151,6 +222,10 @@ ForwardRef_
   # stenotype
 
 ----
+
+.. _PEP 3017: https://www.python.org/dev/peps/pep-3107/
+.. _PEP 484: https://www.python.org/dev/peps/pep-0484/
+.. _PEP 526: https://www.python.org/dev/peps/pep-0526/
 
 
 .. _Any: https://docs.python.org/3/library/typing.html#the-any-type
