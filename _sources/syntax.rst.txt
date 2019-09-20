@@ -13,7 +13,7 @@ and the return value annotation:
 
 .. code-block:: python
 
-  def foo(bar: Arg_1_Type, baz: Arg_2_Type) -> Return_Value_Type:
+  def foo(a: A, b: B) -> R:
       ...
 
 Variable annotation was added a little later with `PEP 526`_, and written as
@@ -21,7 +21,7 @@ follows:
 
 .. code-block:: python
 
-  qux: Var_Type
+  foo: Var_Type
 
 Since a function is just another object, it can also be annotation in this way.
 For example, the function from above could also have been annotated as follows:
@@ -29,7 +29,7 @@ For example, the function from above could also have been annotated as follows:
 .. code-block:: python
 
   from typing import Callable
-  foo: Callable[[Arg_1_Type, Arg_2_Type], Return_Value_Type]
+  foo: Callable[[A, B], R]
 
 ----
 
@@ -42,22 +42,22 @@ similar. Given the examples, they would change in the following ways:
 .. code-block:: python
 
   # function signature notation
-  def foo(bar: "Arg_1_Type", baz: "Arg_2_Type") -> "Return_Value_Type":
+  def foo(a: "A", b: "B") -> "R":
       ...
 
   # variable notation of plain variables
-  qux: "Var_Type"
+  foo: "Var_Type"
 
   # variable notation of functions
-  foo: "(Arg_1_Type, Arg_2_Type) -> Return_Value_Type"
+  foo: "(A, B) -> R"
 
 
 ``typing``-Types Equivalent Mappings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Any_:
-Cases where you have to specify a type but do not want to place restrictions
-on it, you may use ``object`` or `_` instead:
+Is used in cases where you have to specify a type but do not want to place
+restrictions on it.
 
 .. code-block:: python
 
@@ -101,16 +101,19 @@ is what a few other languages allow as well.
 
 Tuple_:
 Fixed size container where for every element present in it the correct type
-should be supplied. All containers should be specified by using their literal
-python notation equivalent.
+should be supplied. Tuples may also be defined with flexible length, which is
+useful for variadic functions. All containers should be specified by using
+their literal python notation equivalent.
 
 .. code-block:: python
 
   # regular
   foo: typing.Tuple[int, str, float]
+  bar: typing.Tuple[int, ...]
 
   # stenotype
   foo: "(int, str, float)"
+  bar: "(int, ...)"
 
 ----
 
@@ -157,29 +160,51 @@ relevant for annotation. Use literal notation in ``stenotype`` mode.
 ----
 
 Callable_:
-
+In situations where it's not possible to annotate a function in its signature,
+its name can be accessed at a later point in time to add type info.
 
 .. code-block:: python
 
   # regular
+  foo: typing.Callable[[str], int]
 
   # stenotype
+  foo: "(str) -> int"
 
 ----
 
-Iterable_
-
-The Iterable interface is primarily used for variadic arguments in functions
-and for return types of generators. Use the `*` in either context when using
-``stenoype``.
+Iterable_:
+The Iterable interface is primarily used for containers that you only plan to
+use in loops and for return types of generators. Use the `*` in either context
+when using ``stenoype``.
 
 .. code-block:: python
 
   # regular
-  foo: typing.Callable[[str, typing.Iterable[int]], typing.Iterable[float]]
+  foo: typing.Iterable[int]
+  bar: typing.Callable[[], typing.Iterable[bool]]
 
   # stenotype
-  foo: "(str, *int) -> *float"
+  foo: "*int"
+  bar: "() -> *bool"
+
+----
+
+Literal_:
+Literal values are not really types, but they still can be meaningfully used
+in annotations. Most often, they will be part of a union, since they'd
+otherwise just be constants.
+
+Types can't be expressed as literals in ``stenotype`` mode, since they'd be
+interpreted as instances of that type, and not the actual type object.
+
+.. code-block:: python
+
+  # regular
+  foo: typing.Union['foo', 'bar', 'baz', 1]
+
+  # stenotype
+  foo: "'foo' or 'bar' or 'baz' or 1"
 
 ----
 
@@ -203,16 +228,6 @@ Generic_
 
 ----
 
-Literal_
-
-.. code-block:: python
-
-  # regular
-
-  # stenotype
-
-----
-
 ForwardRef_
 
 .. code-block:: python
@@ -223,10 +238,47 @@ ForwardRef_
 
 ----
 
+
+Special Function Qualifiers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can use a limited set of keywords to describe a number of special functions
+in ``stenotype`` when annotating a function object as a variable.
+
+**Asynchronous function**
+
+.. code-block:: python
+
+  # regular
+  typing.Callable[[A, B], typing.Awaitable[R]
+
+  # stenotype
+  "(A, B) -> await R"
+
+**Asynchronous generator**
+
+.. code-block:: python
+
+  # regular
+  typing.Callable[[A, B], typing.AsyncIterable[R]
+
+  # stenotype
+  "(A, B) -> await *R"
+
+**Context managing functions**
+
+.. code-block:: python
+
+  # regular
+  typing.Callable[[A, B], typing.ContextManager[R]
+
+  # stenotype
+  "(A, B) -> with R"
+
+
 .. _PEP 3017: https://www.python.org/dev/peps/pep-3107/
 .. _PEP 484: https://www.python.org/dev/peps/pep-0484/
 .. _PEP 526: https://www.python.org/dev/peps/pep-0526/
-
 
 .. _Any: https://docs.python.org/3/library/typing.html#the-any-type
 .. _Union: https://docs.python.org/3/library/typing.html#typing.Union
