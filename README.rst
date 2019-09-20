@@ -5,11 +5,7 @@ stenotype
    :alt: Tablet in a typewriter
    :align: center
 
-.. image:: https://badges.gitter.im/stenotype/community.svg
-   :alt: Join the chat at https://gitter.im/stenotype/community
-   :target: https://gitter.im/stenotype/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
-.. image:: https://github.com/a-recknagel/stenotype/workflows/Cabbage/badge.svg
+.. image:: https://github.com/a-recknagel/stenotype/workflows/CI-CD/badge.svg
    :alt: Main workflow status
    :target: https://github.com/a-recknagel/stenotype/actions
 
@@ -32,6 +28,10 @@ stenotype
 .. image:: https://img.shields.io/badge/codestyle-black-black
    :alt: Any color you want
    :target: https://black.readthedocs.io/en/stable/
+
+.. image:: https://badges.gitter.im/stenotype/community.svg
+   :alt: Join the chat at https://gitter.im/stenotype/community
+   :target: https://gitter.im/stenotype/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 .. header-end
 

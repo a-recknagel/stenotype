@@ -1,0 +1,100 @@
+name: CI-CD
+
+on: [push]
+
+jobs:
+
+  CI:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python: ['3.6']  # add pypy3.6 here as soon as it's supported
+    steps:
+
+      # setup python environment
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+          architecture: 'x64'
+      - uses: actions/checkout@v1
+
+      # run CI pipeline
+      - name: Building package
+        run: |
+          pip install poetry==1.0.0a4  # FIXME: need pre-release for export
+          poetry build
+      - name: Installing fresh package
+        run: pip install dist/stenotype*.whl
+      - name: Building documentation
+        run: |
+          pip install sphinx Pallets-Sphinx-Themes
+          sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
+          sphinx-build docs public -b dirhtml
+      - name: Make sure the project is black
+        run: |
+          pip install black
+          black src/ tests/ --check
+      - name: Static typing test with mypy
+        run: |
+          pip install mypy
+          mypy src/
+      - name: Running test suite
+        run: |
+          pip install pytest pytest-sugar
+          pytest tests/
+      - name: Running test coverage
+        run: |
+          pip install pytest-cov
+          pytest tests/ --cov
+      - name: Test dependencies for known issues
+        run: |
+          pip install safety
+          poetry export -f requirements.txt
+          safety check -r requirements.txt
+      - name: Test source code for potential exploits
+        run: |
+          pip install bandit
+          bandit -r src
+
+      # upload artifacts
+      - uses: actions/upload-artifact@v1
+        with:
+          name: distributions
+          path: dist
+      - uses: actions/upload-artifact@v1
+        with:
+          name: documentation
+          path: public
+
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    steps:
+
+      # download docs artifacts and publish them
+      - uses: actions/download-artifact@v1
+        with:
+          name: documentation
+          path: public
+      - name: Deploy docs to github pages
+        if: github.ref == 'master'
+        uses: peaceiris/actions-gh-pages@v2.3.1
+        env:
+          PERSONAL_TOKEN: ${{ secrets.PAT }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: public
+
+      # download packages and publish them
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3'
+          architecture: 'x64'
+      - uses: actions/download-artifact@v1
+        with:
+          name: distributions
+          path: dist
+#      - name: Deploy new package version to pypi
+#        if: github.ref == 'master'
+#        run: |
+#          pip install poetry
+#          poetry publish -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }} artifacts/packages/*
