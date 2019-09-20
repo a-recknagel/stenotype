@@ -11,9 +11,12 @@ release = __version__
 # -- General configuration ---------------------------------------------------
 templates_path = ['_templates']
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
+    "pallets_sphinx_themes",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.coverage",
+    "sphinx.ext.githubpages",
 ]
 
 
@@ -22,5 +25,6 @@ autodoc_member_order = "bysource"
 
 
 # -- Options for HTML output -------------------------------------------------
+html_theme = "flask"  # one of [flask, jinja, werkzeug, click]
 html_static_path = ['_static']
 html_logo = '_static/typewriter-48.png'

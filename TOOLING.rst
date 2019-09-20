@@ -19,6 +19,19 @@ command:
 Poetry will drop `a wheel file`_ in ``dist/``.
 
 
+Documentation
+~~~~~~~~~~~~~
+We use sphinx_ to build the project's documentation. This includes all rst
+documents in ``docs/``, plus autodocs generated from the source code's
+docstrings. It is build as static html by default in order to be easy to pick
+up by servers:
+
+.. code-block:: bash
+
+  $ sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
+  $ sphinx-build docs/ public/
+
+
 Unit Tests
 ~~~~~~~~~~
 This project's unit test suite is run with pytest_. Execute it with:
@@ -94,6 +107,7 @@ pytest-cov_ makes things quite simple:
 .. _docker is installed: https://docs.docker.com/install/
 .. _pure python wheels: https://packaging.python.org/guides/distributing-packages-using-setuptools/#pure-python-wheels
 .. _a wheel file: https://pythonwheels.com/
+.. _sphinx: https://www.sphinx-doc.org/en/master/index.html
 .. _pytest: https://docs.pytest.org/en/latest/
 .. _type hinting: https://www.python.org/dev/peps/pep-0484/
 .. _mypy: http://mypy-lang.org/
