@@ -55,6 +55,11 @@ similar. Given the examples, they would change in the following ways:
 ``typing``-Types Equivalent Mappings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Special Forms
+'''''''''''''
+
+Special forms use reserved symbols to represent special types.
+
 Any_:
 Is used in cases where you have to specify a type but do not want to place
 restrictions on it.
@@ -97,15 +102,20 @@ is what a few other languages allow as well.
   # stenotype
   foo: "?int"
 
-----
+Containers
+''''''''''
+
+All containers are specified by their literal notation.
 
 Tuple_:
-Fixed size container where for every element present in it the correct type
-should be supplied. Tuples may also be defined with flexible length, which is
-useful for variadic functions. All containers should be specified by using
-their literal python notation equivalent.
+Fixed size ``()`` literal with element types specified for each position.
+Tuples may also be defined with flexible length using ``...`` to arbitrarily repeat the preceding type.
 
 .. code-block:: python
+  
+  # value
+  foo = (1, 'two', 3.0)
+  bar = (1, 2, 3, 4, 5, 6)
 
   # regular
   foo: typing.Tuple[int, str, float]
@@ -118,24 +128,33 @@ their literal python notation equivalent.
 ----
 
 List_:
-A typed list should only contain a single type. Use literal notation in
-``stenotype`` mode.
+Variable size ``[]`` literal with all elements of the same type.
+For mixed element types, use a union.
 
 .. code-block:: python
 
+  # value
+  foo = [1, 2, 3, 4, 5, 6]
+  bar = [1, 'two', 3, 4, 'five', 6]
+
   # regular
   foo: typing.List[int]
+  foo: typing.List[Union[int, str]]
 
   # stenotype
   foo: "[int]"
+  foo: "[int or str]"
 
 ----
 
 Dict_:
-A dictionary contains two arguments, one for the key types and one for the
-value types. Use literal notation in ``stenotype`` mode.
+Variable size ``{}`` literal with all keys and value of the same type, respectively.
+For mixed element types, use a union.
 
 .. code-block:: python
+
+  # value
+  foo = {'one': 1, 'three': 3, 'two': 2}  
 
   # regular
   foo: typing.Dict[str, int]
@@ -147,9 +166,12 @@ value types. Use literal notation in ``stenotype`` mode.
 
 Set_:
 Set notation is identical to list notation, the difference between them is not
-relevant for annotation. Use literal notation in ``stenotype`` mode.
+relevant for the annotation.
 
 .. code-block:: python
+
+  # value
+  foo = {1, 2, 3, 5, 6, 4}
 
   # regular
   foo: typing.Set[int]
@@ -157,26 +179,70 @@ relevant for annotation. Use literal notation in ``stenotype`` mode.
   # stenotype
   foo: "{int}"
 
-----
+Signatures
+''''''''''
+
+Specifying the signature of functions is important for wrappers (e.g. decorators),
+callbacks and higher-order functions. It also allows annotating functions from
+third-party libraries which lack annotations.
 
 Callable_:
 In situations where it's not possible to annotate a function in its signature,
 its name can be accessed at a later point in time to add type info.
+This can also be used to specify the type of callbacks or higher-order functions.
 
 .. code-block:: python
 
+  # value
+  def foo(a: str, b: int) -> int:
+      ...
+
   # regular
-  foo: typing.Callable[[str], int]
+  foo: typing.Callable[[str, int], int]
 
   # stenotype
-  foo: "(str) -> int"
+  foo: "(str, int) -> int"
 
-----
+.. note::
+
+    Variadic Arguments:
+
+    When the number of arguments is arbitrary, the ``*`` and ``**`` symbols are used.
+    Similar to list and dict, the type of *all* variadic arguments is the same; use a union if multiple are accepted.
+
+    .. code-block:: python
+
+       # value
+       def foo(a: str, *b: int, **c: float) -> int:
+           ...
+
+       # stenotype
+       foo: "(str, *int, **float) -> int"
+
+    Named Arguments:
+    
+    If names of arguments are part of the signature, these can be annotated similar to dictionary keys.
+    Use ``name: Type`` instead of just ``Type``; keyword-only arguments are implied by following a ``*`` argument.
+    
+    .. code-block:: python
+
+       # value
+       def foo(a: str, *b: int, c: bool, **d: float) -> int:
+           ...
+
+       # stenotype
+       foo: "(a: str, *int, c: bool, **float) -> int"
+
+    Names of positional can be ommited; keyword-only arguments must always have a name.
+    Note that variadic arguments never have a name.
+
+Common Types
+''''''''''''
 
 Iterable_:
 The Iterable interface is primarily used for containers that you only plan to
 use in loops and for return types of generators. Use the `*` in either context
-when using ``stenoype``.
+when using ``stenotype``.
 
 .. code-block:: python
 
@@ -185,10 +251,10 @@ when using ``stenoype``.
   bar: typing.Callable[[], typing.Iterable[bool]]
 
   # stenotype
-  foo: "*int"
-  bar: "() -> *bool"
+  foo: "iter int"
+  bar: "() -> iter bool"
 
-----
+
 
 Literal_:
 Literal values are not really types, but they still can be meaningfully used
@@ -197,6 +263,8 @@ otherwise just be constants.
 
 Types can't be expressed as literals in ``stenotype`` mode, since they'd be
 interpreted as instances of that type, and not the actual type object.
+Only constants (``True``, ``False``, ``None``, ``Ellipsis``) and primitive literals
+(``str``, ``int``, ``float``) are valid for literal types.
 
 .. code-block:: python
 
@@ -206,7 +274,8 @@ interpreted as instances of that type, and not the actual type object.
   # stenotype
   foo: "'foo' or 'bar' or 'baz' or 1"
 
-----
+Meta Types
+''''''''''
 
 TypeVar_
 
@@ -236,44 +305,63 @@ ForwardRef_
 
   # stenotype
 
-----
-
-
 Special Function Qualifiers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can use a limited set of keywords to describe a number of special functions
-in ``stenotype`` when annotating a function object as a variable.
+You can use a limited set of keywords to describe a number of common types.
+These are especially useful when annotating the return types of functions.
+Keywords correspond to how the type is used to get a value of a specifi type.
 
 **Asynchronous function**
 
 .. code-block:: python
 
+  # value
+  async def foo(a: A, b: B) -> R:
+    return r
+
+  bar = foo(a, b)
+
   # regular
-  typing.Callable[[A, B], typing.Awaitable[R]
+  foo: typing.Callable[[A, B], typing.Awaitable[R]]
+  bar: typing.Awaitable[R]
 
   # stenotype
-  "(A, B) -> await R"
+  foo: "(A, B) -> await R"
+  bar: "await R"
 
 **Asynchronous generator**
 
 .. code-block:: python
 
+  # value
+  async def foo(a: A, b: B) -> AsyncIterable[R]:
+     yield r
+  
+  bar = foo(a, b)
+
   # regular
-  typing.Callable[[A, B], typing.AsyncIterable[R]
+  foo: typing.Callable[[A, B], typing.AsyncIterable[R]]
+  bar: typing.AsyncIterable[R]
 
   # stenotype
-  "(A, B) -> await *R"
+  foo: "(A, B) -> await iter R"
+  bar: "await iter R"
 
 **Context managing functions**
 
 .. code-block:: python
 
+  @contextmanager
+  def foo(a: A, b: B):
+      yield r
+
   # regular
-  typing.Callable[[A, B], typing.ContextManager[R]
+  foo: typing.Callable[[A, B], typing.ContextManager[R]
 
   # stenotype
-  "(A, B) -> with R"
+  foo: "(A, B) -> with R"
+
 
 
 .. _PEP 3017: https://www.python.org/dev/peps/pep-3107/
