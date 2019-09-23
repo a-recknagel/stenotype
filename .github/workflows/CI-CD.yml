@@ -71,13 +71,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Location check
+        run: echo "Currently on ${{ github.ref }}"
+
       # download docs artifacts and publish them
       - uses: actions/download-artifact@v1
         with:
           name: documentation
           path: public
       - name: Deploy docs to github pages
-        if: github.ref == 'master'
+        if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v2.3.1
         env:
           PERSONAL_TOKEN: ${{ secrets.PAT }}
@@ -93,8 +96,9 @@ jobs:
         with:
           name: distributions
           path: dist
-#      - name: Deploy new package version to pypi
-#        if: github.ref == 'master'
-#        run: |
-#          pip install poetry
-#          poetry publish -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }} artifacts/packages/*
+      - name: Deploy new package version to pypi
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo "Here is where the code will be publish once it actually does something."
+          # pip install poetry
+          # poetry publish -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }} artifacts/packages/*
