@@ -11,12 +11,16 @@ release = __version__
 # -- General configuration ---------------------------------------------------
 templates_path = ['_templates']
 extensions = [
-    "pallets_sphinx_themes",
+    # builtin modules
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx.ext.coverage",
     "sphinx.ext.githubpages",
+
+    # installed modules
+    "sphinxcontrib.contentui",
+    "pallets_sphinx_themes",
 ]
 
 

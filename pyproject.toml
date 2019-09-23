@@ -22,6 +22,7 @@ sphinx = "^2.0"
 sphinx-click = "^2.1"
 black = {version = "^18.3-alpha.0",allows-prereleases = true}
 Pallets-Sphinx-Themes = "^1.2"
+sphinxcontrib-contentui = "^0.2.4"
 
 [tool.black]
 target-version = ["py36"]

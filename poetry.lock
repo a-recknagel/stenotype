@@ -458,6 +458,17 @@ version = "1.0.1"
 
 [[package]]
 category = "dev"
+description = "Sphinx \"contentui\" extension"
+name = "sphinxcontrib-contentui"
+optional = false
+python-versions = "*"
+version = "0.2.4"
+
+[package.dependencies]
+Sphinx = ">=2.0"
+
+[[package]]
+category = "dev"
 description = ""
 name = "sphinxcontrib-devhelp"
 optional = false
@@ -552,7 +563,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "51f398fdc268859c29c69cf923eb77e99c56c67f3d64e0ec897b661550b06a20"
+content-hash = "1938e69ec53c4435745b68ab3f381712ab568510bec8d73041105b102665bd66"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -600,6 +611,7 @@ snowballstemmer = ["713e53b79cbcf97bc5245a06080a33d54a77e7cce2f789c835a143bcdb5c
 sphinx = ["22538e1bbe62b407cf5a8aabe1bb15848aa66bb79559f42f5202bbce6b757a69", "f9a79e746b87921cabc3baa375199c6076d1270cee53915dbd24fdbeaaacc427"]
 sphinx-click = ["2c7847607d07bc0ddf28acff3aa639b2660d06c5d95d1efe89eca6494fc750de", "814b2463b576dfafaf4a6f8ed9585f6d9696073ed5e4cca5b59d2dc9d29d3bc0"]
 sphinxcontrib-applehelp = ["edaa0ab2b2bc74403149cb0209d6775c96de797dfd5b5e2a71981309efab3897", "fb8dee85af95e5c30c91f10e7eb3c8967308518e0f7488a2828ef7bc191d0d5d"]
+sphinxcontrib-contentui = ["5caa2efc0fc597a70825ad6bae8f6b11944d85e2f0fdf5340848e2ef24beae61"]
 sphinxcontrib-devhelp = ["6c64b077937330a9128a4da74586e8c2130262f014689b4b89e2d08ee7294a34", "9512ecb00a2b0821a146736b39f7aeb90759834b07e81e8cc23a9c70bacb9981"]
 sphinxcontrib-htmlhelp = ["4670f99f8951bd78cd4ad2ab962f798f5618b17675c35c5ac3b2132a14ea8422", "d4fd39a65a625c9df86d7fa8a2d9f3cd8299a3a4b15db63b50aac9e161d8eff7"]
 sphinxcontrib-jsmath = ["2ec2eaebfb78f3f2078e73666b1415417a116cc848b72e5172e596c871103178", "a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8"]

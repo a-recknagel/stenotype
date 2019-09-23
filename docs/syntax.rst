@@ -64,14 +64,22 @@ Any_:
 Is used in cases where you have to specify a type but do not want to place
 restrictions on it.
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
-  foo: typing.Any
+    .. tab-container:: any_regular
+        :title: regular
 
-  # stenotype
-  foo: "_"
-  foo: "object"
+        .. code-block:: python
+
+          foo: typing.Any
+
+    .. tab-container:: any_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "_"
+          foo: "object"
 
 ----
 
@@ -79,13 +87,21 @@ Union_:
 If a number of types are admissible for a single variable, just list them all
 with an ``or`` between them.
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
-  foo: typing.Union[int, float]
+    .. tab-container:: union_regular
+        :title: regular
 
-  # stenotype
-  foo: "int or float"
+        .. code-block:: python
+
+          foo: typing.Union[int, float]
+
+    .. tab-container:: union_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "int or float"
 
 ----
 
@@ -94,13 +110,21 @@ A special case of ``Union``, where the only other option besides the specified
 type for a variable is ``None``. ``stenotype`` prepends a question mark, which
 is what a few other languages allow as well.
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
-  foo: typing.Optional[int]
+    .. tab-container:: optional_regular
+        :title: regular
 
-  # stenotype
-  foo: "?int"
+        .. code-block:: python
+
+          foo: typing.Optional[int]
+
+    .. tab-container:: optional_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "?int"
 
 Containers
 ''''''''''
@@ -109,21 +133,34 @@ All containers are specified by their literal notation.
 
 Tuple_:
 Fixed size ``()`` literal with element types specified for each position.
-Tuples may also be defined with flexible length using ``...`` to arbitrarily repeat the preceding type.
+Tuples may also be defined with flexible length using ``...`` to arbitrarily repeat the
+preceding type.
 
-.. code-block:: python
-  
-  # value
-  foo = (1, 'two', 3.0)
-  bar = (1, 2, 3, 4, 5, 6)
+.. content-tabs::
 
-  # regular
-  foo: typing.Tuple[int, str, float]
-  bar: typing.Tuple[int, ...]
+    .. tab-container:: tuple_value
+        :title: value
 
-  # stenotype
-  foo: "(int, str, float)"
-  bar: "(int, ...)"
+        .. code-block:: python
+
+          foo = (1, 'two', 3.0)
+          bar = (1, 2, 3, 4, 5, 6)
+
+    .. tab-container:: tuple_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Tuple[int, str, float]
+          bar: typing.Tuple[int, ...]
+
+    .. tab-container:: tuple_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "(int, str, float)"
+          bar: "(int, ...)"
 
 ----
 
@@ -131,19 +168,31 @@ List_:
 Variable size ``[]`` literal with all elements of the same type.
 For mixed element types, use a union.
 
-.. code-block:: python
+.. content-tabs::
 
-  # value
-  foo = [1, 2, 3, 4, 5, 6]
-  bar = [1, 'two', 3, 4, 'five', 6]
+    .. tab-container:: list_value
+        :title: value
 
-  # regular
-  foo: typing.List[int]
-  foo: typing.List[Union[int, str]]
+        .. code-block:: python
 
-  # stenotype
-  foo: "[int]"
-  foo: "[int or str]"
+          foo = [1, 2, 3, 4, 5, 6]
+          bar = [1, 'two', 3, 4, 'five', 6]
+
+    .. tab-container:: list_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.List[int]
+          foo: typing.List[Union[int, str]]
+
+    .. tab-container:: list_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "[int]"
+          foo: "[int or str]"
 
 ----
 
@@ -151,16 +200,28 @@ Dict_:
 Variable size ``{}`` literal with all keys and value of the same type, respectively.
 For mixed element types, use a union.
 
-.. code-block:: python
+.. content-tabs::
 
-  # value
-  foo = {'one': 1, 'three': 3, 'two': 2}  
+    .. tab-container:: dict_value
+        :title: value
 
-  # regular
-  foo: typing.Dict[str, int]
+        .. code-block:: python
 
-  # stenotype
-  foo: "{str: int}"
+          foo = {'one': 1, 'three': 3, 'two': 2}
+
+    .. tab-container:: dict_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Dict[str, int]
+
+    .. tab-container:: dict_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "{str: int}"
 
 ----
 
@@ -168,16 +229,28 @@ Set_:
 Set notation is identical to list notation, the difference between them is not
 relevant for the annotation.
 
-.. code-block:: python
+.. content-tabs::
 
-  # value
-  foo = {1, 2, 3, 5, 6, 4}
+    .. tab-container:: set_value
+        :title: value
 
-  # regular
-  foo: typing.Set[int]
+        .. code-block:: python
 
-  # stenotype
-  foo: "{int}"
+          foo = {1, 2, 3, 5, 6, 4}
+
+    .. tab-container:: set_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Set[int]
+
+    .. tab-container:: set_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "{int}"
 
 Signatures
 ''''''''''
@@ -191,47 +264,91 @@ In situations where it's not possible to annotate a function in its signature,
 its name can be accessed at a later point in time to add type info.
 This can also be used to specify the type of callbacks or higher-order functions.
 
-.. code-block:: python
+.. content-tabs::
 
-  # value
-  def foo(a: str, b: int) -> int:
-      ...
+    .. tab-container:: callable_value
+        :title: value
 
-  # regular
-  foo: typing.Callable[[str, int], int]
+        .. code-block:: python
 
-  # stenotype
-  foo: "(str, int) -> int"
+          def foo(a: str, b: int) -> int:
+              ...
+
+    .. tab-container:: callable_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Callable[[str, int], int]
+
+    .. tab-container:: callable_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "(str, int) -> int"
 
 .. note::
 
     Variadic Arguments:
 
     When the number of arguments is arbitrary, the ``*`` and ``**`` symbols are used.
-    Similar to list and dict, the type of *all* variadic arguments is the same; use a union if multiple are accepted.
+    Similar to list and dict, the type of *all* variadic arguments is the same; use a
+    union if multiple are accepted.
 
-    .. code-block:: python
+    .. content-tabs::
 
-       # value
-       def foo(a: str, *b: int, **c: float) -> int:
-           ...
+        .. tab-container:: variadic_value
+            :title: value
 
-       # stenotype
-       foo: "(str, *int, **float) -> int"
+            .. code-block:: python
+
+              def foo(a: str, *b: int, **c: float) -> int:
+                  ...
+
+        .. tab-container:: variadic_regular
+            :title: regular
+
+            .. code-block:: python
+
+              # TODO
+
+        .. tab-container:: variadic_stenotype
+            :title: stenotype
+
+            .. code-block:: python
+
+              foo: "(str, *int, **float) -> int"
 
     Named Arguments:
     
-    If names of arguments are part of the signature, these can be annotated similar to dictionary keys.
-    Use ``name: Type`` instead of just ``Type``; keyword-only arguments are implied by following a ``*`` argument.
-    
-    .. code-block:: python
+    If names of arguments are part of the signature, these can be annotated similar to
+    dictionary keys. Use ``name: Type`` instead of just ``Type``; keyword-only
+    arguments are implied by following a ``*`` argument.
 
-       # value
-       def foo(a: str, *b: int, c: bool, **d: float) -> int:
-           ...
+    .. content-tabs::
 
-       # stenotype
-       foo: "(a: str, *int, c: bool, **float) -> int"
+        .. tab-container:: named_value
+            :title: value
+
+            .. code-block:: python
+
+              def foo(a: str, *b: int, c: bool, **d: float) -> int:
+                  ...
+
+        .. tab-container:: named_regular
+            :title: regular
+
+            .. code-block:: python
+
+              # TODO
+
+        .. tab-container:: named_stenotype
+            :title: stenotype
+
+            .. code-block:: python
+
+              foo: "(a: str, *int, c: bool, **float) -> int"
 
     Names of positional can be ommited; keyword-only arguments must always have a name.
     Note that variadic arguments never have a name.
@@ -244,17 +361,23 @@ The Iterable interface is primarily used for containers that you only plan to
 use in loops and for return types of generators. Use the `*` in either context
 when using ``stenotype``.
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
-  foo: typing.Iterable[int]
-  bar: typing.Callable[[], typing.Iterable[bool]]
+    .. tab-container:: iterable_regular
+        :title: regular
 
-  # stenotype
-  foo: "iter int"
-  bar: "() -> iter bool"
+        .. code-block:: python
 
+          foo: typing.Iterable[int]
+          bar: typing.Callable[[], typing.Iterable[bool]]
 
+    .. tab-container:: iterable_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "iter int"
+          bar: "() -> iter bool"
 
 Literal_:
 Literal values are not really types, but they still can be meaningfully used
@@ -266,44 +389,82 @@ interpreted as instances of that type, and not the actual type object.
 Only constants (``True``, ``False``, ``None``, ``Ellipsis``) and primitive literals
 (``str``, ``int``, ``float``) are valid for literal types.
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
-  foo: typing.Union['foo', 'bar', 'baz', 1]
+    .. tab-container:: literal_regular
+        :title: regular
 
-  # stenotype
-  foo: "'foo' or 'bar' or 'baz' or 1"
+        .. code-block:: python
+
+          foo: typing.Union['foo', 'bar', 'baz', 1]
+
+    .. tab-container:: literal_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "'foo' or 'bar' or 'baz' or 1"
 
 Meta Types
 ''''''''''
 
 TypeVar_
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
+    .. tab-container:: typevar_regular
+        :title: regular
 
-  # stenotype
+        .. code-block:: python
+
+          # code
+
+    .. tab-container:: typevar_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          # code
 
 ----
 
 Generic_
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
+    .. tab-container:: generic_regular
+        :title: regular
 
-  # stenotype
+        .. code-block:: python
+
+          # code
+
+    .. tab-container:: generic_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          # code
 
 ----
 
 ForwardRef_
 
-.. code-block:: python
+.. content-tabs::
 
-  # regular
+    .. tab-container:: forwardref_regular
+        :title: regular
 
-  # stenotype
+        .. code-block:: python
+
+          # code
+
+    .. tab-container:: forwardref_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          # code
 
 Special Function Qualifiers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -314,55 +475,91 @@ Keywords correspond to how the type is used to get a value of a specifi type.
 
 **Asynchronous function**
 
-.. code-block:: python
+.. content-tabs::
 
-  # value
-  async def foo(a: A, b: B) -> R:
-    return r
+    .. tab-container:: async_value
+        :title: value
 
-  bar = foo(a, b)
+        .. code-block:: python
 
-  # regular
-  foo: typing.Callable[[A, B], typing.Awaitable[R]]
-  bar: typing.Awaitable[R]
+          async def foo(a: A, b: B) -> R:
+              return r
 
-  # stenotype
-  foo: "(A, B) -> await R"
-  bar: "await R"
+          bar = foo(a, b)
+
+    .. tab-container:: async_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Callable[[A, B], typing.Awaitable[R]]
+          bar: typing.Awaitable[R]
+
+    .. tab-container:: async_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "(A, B) -> await R"
+          bar: "await R"
 
 **Asynchronous generator**
 
-.. code-block:: python
+.. content-tabs::
 
-  # value
-  async def foo(a: A, b: B) -> AsyncIterable[R]:
-     yield r
-  
-  bar = foo(a, b)
+    .. tab-container:: asyncgen_value
+        :title: value
 
-  # regular
-  foo: typing.Callable[[A, B], typing.AsyncIterable[R]]
-  bar: typing.AsyncIterable[R]
+        .. code-block:: python
 
-  # stenotype
-  foo: "(A, B) -> await iter R"
-  bar: "await iter R"
+          async def foo(a: A, b: B) -> AsyncIterable[R]:
+              yield r
+
+          bar = foo(a, b)
+
+    .. tab-container:: asyncgen_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Callable[[A, B], typing.AsyncIterable[R]]
+          bar: typing.AsyncIterable[R]
+
+    .. tab-container:: asyncgen_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "(A, B) -> await iter R"
+          bar: "await iter R"
 
 **Context managing functions**
 
-.. code-block:: python
+.. content-tabs::
 
-  @contextmanager
-  def foo(a: A, b: B):
-      yield r
+    .. tab-container:: contextmanager_value
+        :title: value
 
-  # regular
-  foo: typing.Callable[[A, B], typing.ContextManager[R]
+        .. code-block:: python
 
-  # stenotype
-  foo: "(A, B) -> with R"
+            @contextmanager
+            def foo(a: A, b: B):
+                yield r
 
 
+    .. tab-container:: contextmanager_regular
+        :title: regular
+
+        .. code-block:: python
+
+          foo: typing.Callable[[A, B], typing.ContextManager[R]
+
+    .. tab-container:: contextmanager_stenotype
+        :title: stenotype
+
+        .. code-block:: python
+
+          foo: "(A, B) -> with R"
 
 .. _PEP 3017: https://www.python.org/dev/peps/pep-3107/
 .. _PEP 484: https://www.python.org/dev/peps/pep-0484/

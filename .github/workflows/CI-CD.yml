@@ -27,9 +27,9 @@ jobs:
         run: pip install dist/stenotype*.whl
       - name: Building documentation
         run: |
-          pip install sphinx Pallets-Sphinx-Themes
+          pip install sphinx Pallets-Sphinx-Themes sphinxcontrib-contentui
           sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
-          sphinx-build docs public -b dirhtml
+          sphinx-build docs public -b html
       - name: Make sure the project is black
         run: |
           pip install black
