@@ -7,6 +7,7 @@ stenotype documentation
 .. toctree::
    :maxdepth: 4
 
+   cli
    syntax
    autodoc/stenotype
 

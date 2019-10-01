@@ -1,0 +1,19 @@
+stenotype.backend package
+=========================
+
+.. automodule:: stenotype.backend
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+stenotype.backend.parser module
+-------------------------------
+
+.. automodule:: stenotype.backend.parser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

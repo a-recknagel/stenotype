@@ -6,8 +6,23 @@ stenotype package
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+
+   stenotype.backend
+
 Submodules
 ----------
+
+stenotype.cli module
+--------------------
+
+.. automodule:: stenotype.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 stenotype.util module
 ---------------------
