@@ -19,42 +19,32 @@ jobs:
       - uses: actions/checkout@v1
 
       # run CI pipeline
-      - name: Building package
+      - name: Installing package
+        env:
+          POETRY_VIRTUALENVS_CREATE: false
         run: |
-          pip install poetry==1.0.0a4  # FIXME: need pre-release for export
-          poetry build
-      - name: Installing fresh package
-        run: pip install dist/stenotype*.whl
+          pip install poetry==1.0.0b1  # FIXME: need pre-release for export
+          poetry install
+      - name: Building package as artifact
+        run: poetry build
       - name: Building documentation
         run: |
-          pip install sphinx sphinx_rtd_theme sphinxcontrib-contentui
           sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
           sphinx-build docs public -b html
       - name: Make sure the project is black
-        run: |
-          pip install black
-          black src/ tests/ --check
+        run: black src/ tests/ --check
       - name: Static typing test with mypy
-        run: |
-          pip install mypy
-          mypy src/
+        run: mypy src/
       - name: Running test suite
-        run: |
-          pip install pytest pytest-sugar
-          pytest tests/
+        run: pytest tests/
       - name: Running test coverage
-        run: |
-          pip install pytest-cov
-          pytest tests/ --cov
+        run: pytest tests/ --cov
       - name: Test dependencies for known issues
         run: |
-          pip install safety
-          poetry export -f requirements.txt
+          poetry export -f requirements.txt > requirements.txt
           safety check -r requirements.txt
       - name: Test source code for potential exploits
-        run: |
-          pip install bandit
-          bandit -r src
+        run: bandit -r src
 
       # upload artifacts
       - uses: actions/upload-artifact@v1

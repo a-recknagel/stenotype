@@ -2,14 +2,14 @@ from stenotype import __version__
 
 
 # -- Project information -----------------------------------------------------
-project = 'stenotype'
-copyright = '2019, Arne'
-author = 'Arne Recknagel'
+project = "stenotype"
+copyright = "2019, Arne"
+author = "Arne Recknagel"
 release = __version__
 
 
 # -- General configuration ---------------------------------------------------
-templates_path = ['_templates']
+templates_path = ["_templates"]
 extensions = [
     # builtin modules
     "sphinx.ext.autodoc",
@@ -17,10 +17,10 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.coverage",
     "sphinx.ext.githubpages",
-
     # installed modules
     "sphinxcontrib.contentui",
     "sphinx_rtd_theme",
+    "sphinx_click.ext",
 ]
 
 
@@ -30,5 +30,5 @@ autodoc_member_order = "bysource"
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = "sphinx_rtd_theme"
-html_static_path = ['_static']
-html_logo = '_static/typewriter-48.png'
+html_static_path = ["_static"]
+html_logo = "_static/typewriter-48.png"
