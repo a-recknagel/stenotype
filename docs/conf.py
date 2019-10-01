@@ -20,7 +20,7 @@ extensions = [
 
     # installed modules
     "sphinxcontrib.contentui",
-    "pallets_sphinx_themes",
+    "sphinx_rtd_theme",
 ]
 
 
@@ -29,6 +29,6 @@ autodoc_member_order = "bysource"
 
 
 # -- Options for HTML output -------------------------------------------------
-html_theme = "flask"  # one of [flask, jinja, werkzeug, click]
+html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
 html_logo = '_static/typewriter-48.png'

@@ -27,7 +27,7 @@ jobs:
         run: pip install dist/stenotype*.whl
       - name: Building documentation
         run: |
-          pip install sphinx Pallets-Sphinx-Themes sphinxcontrib-contentui
+          pip install sphinx sphinx_rtd_theme sphinxcontrib-contentui
           sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
           sphinx-build docs public -b html
       - name: Make sure the project is black
@@ -99,6 +99,6 @@ jobs:
       - name: Deploy new package version to pypi
         if: github.ref == 'refs/heads/master'
         run: |
-          echo "Here is where the code will be publish once it actually does something."
+          echo "Here is where the code will be published once it actually does something."
           # pip install poetry
           # poetry publish -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }} artifacts/packages/*
