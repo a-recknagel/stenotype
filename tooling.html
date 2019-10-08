@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tooling &mdash; stenotype 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/contentui.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/contentui.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="stenotype.backend package" href="autodoc/stenotype.backend.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> stenotype
+          
+
+          
+            
+            <img src="_static/typewriter-48.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cli.html">stenotype CLI Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syntax.html">Syntax Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autodoc/stenotype.html">Autodocs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tooling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#packaging">Packaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-tests">Unit Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#type-checking">Type Checking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linting">Linting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coverage">Coverage</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">stenotype</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Tooling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tooling.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tooling">
+<h1>Tooling<a class="headerlink" href="#tooling" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="packaging">
+<h2>Packaging<a class="headerlink" href="#packaging" title="Permalink to this headline">¶</a></h2>
+<p>If you want to package the project without its dependencies, use the following
+command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ poetry build -f wheel
+</pre></div>
+</div>
+<p>Poetry will drop <a class="reference external" href="https://pythonwheels.com/">a wheel file</a> in <code class="docutils literal notranslate"><span class="pre">dist/</span></code>.</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>We use <a class="reference external" href="https://www.sphinx-doc.org/en/master/index.html">sphinx</a> to build the project’s documentation. This includes all ReST
+documents in <code class="docutils literal notranslate"><span class="pre">docs/</span></code>, plus autodocs generated from the source code’s
+docstrings. It is build as static html by default in order to be easy to pick
+up by servers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
+$ sphinx-build docs/ public/ -b html
+</pre></div>
+</div>
+</div>
+<div class="section" id="unit-tests">
+<h2>Unit Tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>This project’s unit test suite is run with <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a>. Execute it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pytest tests/
+</pre></div>
+</div>
+</div>
+<div class="section" id="type-checking">
+<h2>Type Checking<a class="headerlink" href="#type-checking" title="Permalink to this headline">¶</a></h2>
+<p>Since version 3.5, python supports <a class="reference external" href="https://www.python.org/dev/peps/pep-0484/">type hinting</a>. You can run a static
+type check with <a class="reference external" href="http://mypy-lang.org/">mypy</a> like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mypy src/
+</pre></div>
+</div>
+</div>
+<div class="section" id="linting">
+<h2>Linting<a class="headerlink" href="#linting" title="Permalink to this headline">¶</a></h2>
+<p>This project’s code style is <a class="reference external" href="https://black.readthedocs.io/en/stable/the_black_code_style.html">black</a>. You can run a classic linter-style test
+with the <code class="docutils literal notranslate"><span class="pre">check</span></code> flag:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ black src/ tests/ --check
+</pre></div>
+</div>
+<p>But it is recommended to use black’s <a class="reference external" href="https://black.readthedocs.io/en/stable/editor_integration.html">auto-formatter</a> in your editor of choice.</p>
+</div>
+<div class="section" id="security">
+<h2>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<p>Since we can’t check every dependency in-depth for security issues, we rely on
+<a class="reference external" href="https://pypi.org/project/safety/">safety</a> to tell us which ones are known to deserve a closer look. You can run
+it on the current python environment, in case it is properly virtualized and
+activated:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ safety check
+</pre></div>
+</div>
+<p>Conversely, you can also use poetry <a class="footnote-reference brackets" href="#id2" id="id1">1</a> to generate a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> for
+yor production dependencies and check that instead, which is a little safer and
+more explicit:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ poetry <span class="nb">export</span> -f requirements.txt  &gt; requirements.txt
+$ safety check -r requirements.txt
+</pre></div>
+</div>
+<p>But checking third party packages is not enough, we also need to check our own
+code. Or rather, we let <a class="reference external" href="https://pypi.org/project/bandit/">bandit</a> do it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bandit -r src/
+</pre></div>
+</div>
+<p>Once these two tools have run with zero issues, you can be reasonably confident
+that your code didn’t blow glaring security holes into the project.</p>
+</div>
+<div class="section" id="coverage">
+<h2>Coverage<a class="headerlink" href="#coverage" title="Permalink to this headline">¶</a></h2>
+<p>We use pytests to run the test suite, so using the <a class="reference external" href="https://coverage.readthedocs.io/en/v4.5.x/">coverage.py</a> wrapper
+<a class="reference external" href="https://pypi.org/project/pytest-cov/">pytest-cov</a> makes things quite simple:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pytest tests/ --cov
+</pre></div>
+</div>
+<p>Unless it makes no sense or is difficult to achieve, we try to stick to 100%
+unit test coverage.</p>
+<hr class="docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>At the time of writing, the <code class="docutils literal notranslate"><span class="pre">export</span></code> command is only available in pre-releases 1.0.0a0 and up.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="autodoc/stenotype.backend.html" class="btn btn-neutral float-left" title="stenotype.backend package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Arne
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
