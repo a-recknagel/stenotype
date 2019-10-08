@@ -17,6 +17,14 @@ def test_multi_usage(test_cli):
     # should be "typing.Optional[int]" "typing.Optional[bool]"
 
 
+def test_version(test_cli):
+    from stenotype import __version__
+
+    result = test_cli("-v")
+    assert result.exit_code == 0
+    assert result.stdout == f"stenotype {__version__}\n"
+
+
 def test_no_args(test_cli):
     result = test_cli()
     assert result.exit_code == 0
@@ -41,10 +49,10 @@ def test_shorten(test_cli):
 def test_parser_exception(test_cli, monkeypatch):
     from stenotype import cli  # need module for monkeypatch
 
-    def parse_that_just_raises(*args, **kwargs):
+    def parse_that_fails(*args, **kwargs):
         raise StenotypeException("test message")
 
-    monkeypatch.setattr(cli.parser, "parse", parse_that_just_raises)
+    monkeypatch.setattr(cli.parser, "parse", parse_that_fails)
 
     result = test_cli("?int")
     assert result.exit_code == 1

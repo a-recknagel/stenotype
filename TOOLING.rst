@@ -21,7 +21,7 @@ Poetry will drop `a wheel file`_ in ``dist/``.
 
 Documentation
 ~~~~~~~~~~~~~
-We use sphinx_ to build the project's documentation. This includes all rst
+We use sphinx_ to build the project's documentation. This includes all ReST
 documents in ``docs/``, plus autodocs generated from the source code's
 docstrings. It is build as static html by default in order to be easy to pick
 up by servers:
@@ -29,7 +29,7 @@ up by servers:
 .. code-block:: bash
 
   $ sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
-  $ sphinx-build docs/ public/
+  $ sphinx-build docs/ public/ -b html
 
 
 Unit Tests
@@ -80,7 +80,7 @@ more explicit:
 
 .. code-block:: bash
 
-  $ poetry export -f requirements.txt
+  $ poetry export -f requirements.txt  > requirements.txt
   $ safety check -r requirements.txt
 
 But checking third party packages is not enough, we also need to check our own
@@ -102,6 +102,9 @@ pytest-cov_ makes things quite simple:
 .. code-block:: bash
 
   $ pytest tests/ --cov
+
+Unless it makes no sense or is difficult to achieve, we try to stick to 100%
+unit test coverage.
 
 .. _Docker: https://www.docker.com/
 .. _docker is installed: https://docs.docker.com/install/

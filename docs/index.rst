@@ -9,7 +9,10 @@ stenotype documentation
 
    cli
    syntax
-   autodoc/stenotype
+   Autodocs <autodoc/stenotype>
+   tooling
 
 .. include:: ../README.rst
    :start-after: header-end
+
+

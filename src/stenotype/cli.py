@@ -9,13 +9,17 @@ from logging import getLogger
 import click
 
 from stenotype.backend import parser
-from stenotype import util
+from stenotype import util, __version__
 
 log = getLogger(__name__)
 
 
 @click.command()
 @click.option(
+    "-v", "--version", is_flag=True, help="Print stenotype's version number and exit."
+)
+@click.option(
+    "-l",
     "--loglevel",
     default="INFO",
     type=click.Choice(["DEBUG", "INFO", "WARNING", "ERROR"]),
@@ -31,11 +35,11 @@ log = getLogger(__name__)
     "-c",
     "--check",
     is_flag=True,
-    help="Disables the check-skipping. Annotations need to be written as they would "
+    help="Disables the check-skipping, annotations need to be written as they would "
     "be in source files in this mode.",
 )
 @click.argument("args", nargs=-1)
-def cli(args, loglevel, shorten, check):
+def cli(args, version, loglevel, shorten, check):
     """CLI entrypoint to test the stenotype backend.
 
     Enter any number of stenotype expressions to see which standard annotations they will
@@ -56,9 +60,10 @@ def cli(args, loglevel, shorten, check):
       T = TypeVar[int]
       typing.Union[bool, T]
     """
-    util.setup_logging(loglevel)
-
     # early exits
+    if version:
+        click.echo(f"stenotype {__version__}")
+        exit(0)
     if shorten and check:
         click.echo(
             "Flags --shorten and --check can't be used simultaneously.", err=True
@@ -68,6 +73,7 @@ def cli(args, loglevel, shorten, check):
         click.echo("No arguments entered, nothing to do.", err=True)
         exit(0)
 
+    util.setup_logging(loglevel)
     try:
         for expression in parser.parse(args, invert=shorten):
             click.echo(expression)

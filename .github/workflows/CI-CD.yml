@@ -30,7 +30,7 @@ jobs:
       - name: Building documentation
         run: |
           sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
-          sphinx-build docs public -b html
+          sphinx-build docs/ public/ -b html
       - name: Make sure the project is black
         run: black src/ tests/ --check
       - name: Static typing test with mypy
@@ -44,7 +44,7 @@ jobs:
           poetry export -f requirements.txt > requirements.txt
           safety check -r requirements.txt
       - name: Test source code for potential exploits
-        run: bandit -r src
+        run: bandit -r src/
 
       # upload artifacts
       - uses: actions/upload-artifact@v1
