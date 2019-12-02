@@ -92,7 +92,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="stenotype.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">stenotype.backend package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-stenotype.backend.parser">stenotype.backend.parser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stenotype.backend.elements">stenotype.backend.elements module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stenotype.backend.grammar">stenotype.backend.grammar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stenotype.backend.steno">stenotype.backend.steno module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-stenotype.backend.typing">stenotype.backend.typing module</a></li>
 </ul>
 </li>
 </ul>
@@ -174,14 +177,354 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-stenotype.backend.parser">
-<span id="stenotype-backend-parser-module"></span><h2>stenotype.backend.parser module<a class="headerlink" href="#module-stenotype.backend.parser" title="Permalink to this headline">¶</a></h2>
-<p>Stand-in until we have an actual implementation.</p>
-<p>Feel free to suggest a better interface, this one is not binding at all and was just a
-wild guess on my part on what a respective parse function might need.</p>
+<div class="section" id="module-stenotype.backend.elements">
+<span id="stenotype-backend-elements-module"></span><h2>stenotype.backend.elements module<a class="headerlink" href="#module-stenotype.backend.elements" title="Permalink to this headline">¶</a></h2>
+<p>Steno Type Elements</p>
+<p>Representations of the fundamental <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> building blocks.
+Each element holds the relevant information for both a <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> and
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code> conversion.</p>
+<p>Note that all elements are represented as values, not types:
+A <code class="xref py py-class docutils literal notranslate"><span class="pre">Steno</span></code> encodes <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> syntax/code,
+not any concrete types.
+For example, <code class="docutils literal notranslate"><span class="pre">Identifier('typing',</span> <span class="pre">'List')</span></code> is not the type <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.List</span></code>
+but represents the name <code class="docutils literal notranslate"><span class="pre">typing.List</span></code>.</p>
+<dl class="class">
+<dt id="stenotype.backend.elements.Dots">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Dots</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Dots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Dots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A literal <code class="docutils literal notranslate"><span class="pre">...</span></code> placeholder</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Identifier">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Identifier</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Identifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Tuple</span></code></p>
+<p>A qualified name, such as <code class="docutils literal notranslate"><span class="pre">typing.Tuple</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Generic">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Generic</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Generic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>A generic type, such as <code class="docutils literal notranslate"><span class="pre">typing.List[int]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Generic.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.Generic.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Generic.parameters">
+<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#stenotype.backend.elements.Generic.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Any">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Any</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Any"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Any" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Any type as <code class="docutils literal notranslate"><span class="pre">_</span></code>, same as <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Any</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Optional">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Optional</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Optional"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Optional" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Optional type as <code class="docutils literal notranslate"><span class="pre">?base</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Optional[base]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Optional.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.Optional.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Union">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Union</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Tuple</span></code></p>
+<p>Union of types as <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">or</span> <span class="pre">B</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Union[A,</span> <span class="pre">B]</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Tuple">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Tuple</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed tuple as <code class="docutils literal notranslate"><span class="pre">(A,</span> <span class="pre">B,</span> <span class="pre">...)</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Tuple[A,</span> <span class="pre">B,</span> <span class="pre">...]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Tuple.elements">
+<em class="property">property </em><code class="sig-name descname">elements</code><a class="headerlink" href="#stenotype.backend.elements.Tuple.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.List">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">List</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.List" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed list as <code class="docutils literal notranslate"><span class="pre">[values]</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.List[values]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.List.values">
+<em class="property">property </em><code class="sig-name descname">values</code><a class="headerlink" href="#stenotype.backend.elements.List.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Dict">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Dict</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed dict as <code class="docutils literal notranslate"><span class="pre">{keys:</span> <span class="pre">values}</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Dict[keys,</span> <span class="pre">values]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Dict.keys">
+<em class="property">property </em><code class="sig-name descname">keys</code><a class="headerlink" href="#stenotype.backend.elements.Dict.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Dict.values">
+<em class="property">property </em><code class="sig-name descname">values</code><a class="headerlink" href="#stenotype.backend.elements.Dict.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Set">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Set</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed dict as <code class="docutils literal notranslate"><span class="pre">{values}</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Set[values]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Set.values">
+<em class="property">property </em><code class="sig-name descname">values</code><a class="headerlink" href="#stenotype.backend.elements.Set.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Literal">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Literal</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Literal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Literal value, not a type</p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Literal.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#stenotype.backend.elements.Literal.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Iterable">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Iterable</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Iterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Iterable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed iterable as <code class="docutils literal notranslate"><span class="pre">iter</span> <span class="pre">base</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Iterable[base]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Iterable.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.Iterable.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Context">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Context</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed context manager as <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">base</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Context.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.Context.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Awaitable">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Awaitable</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Awaitable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Awaitable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed awaitable as <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">base</span></code>, equivalent to <code class="docutils literal notranslate"><span class="pre">typing.Awaitable[base]</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Awaitable.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.Awaitable.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.AsyncIterable">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">AsyncIterable</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#AsyncIterable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.AsyncIterable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed async iterable as <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">iter</span> <span class="pre">base</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.AsyncIterable.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.AsyncIterable.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.AsyncContext">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">AsyncContext</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#AsyncContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.AsyncContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed async context manager as <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">with</span> <span class="pre">base</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.AsyncContext.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.AsyncContext.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-stenotype.backend.grammar">
+<span id="stenotype-backend-grammar-module"></span><h2>stenotype.backend.grammar module<a class="headerlink" href="#module-stenotype.backend.grammar" title="Permalink to this headline">¶</a></h2>
+<p>Grammar for parsing <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> strings to <a class="reference internal" href="#module-stenotype.backend.elements" title="stenotype.backend.elements"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elements</span></code></a></p>
 <dl class="function">
-<dt id="stenotype.backend.parser.parse">
-<code class="sig-prename descclassname">stenotype.backend.parser.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">args: Iterable[str], invert</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stenotype/backend/parser.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.parser.parse" title="Permalink to this definition">¶</a></dt>
+<dt id="stenotype.backend.grammar.parse">
+<code class="sig-prename descclassname">stenotype.backend.grammar.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">steno_string: str</em><span class="sig-paren">)</span> &#x2192; Union[stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]<a class="reference internal" href="../_modules/stenotype/backend/grammar.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.grammar.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a stenotype or typing string to element representation</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-stenotype.backend.steno">
+<span id="stenotype-backend-steno-module"></span><h2>stenotype.backend.steno module<a class="headerlink" href="#module-stenotype.backend.steno" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unparse element representation to a stenotype string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_dots">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_dots</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Dots</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_dots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_dots" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_identifier">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_identifier</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Identifier</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_identifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_generic">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_generic</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Generic</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_generic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_any">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_any</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Any</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_any"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_any" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_optional">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_optional</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Optional</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_optional"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_optional" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_union">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_union</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Union</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_union" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_tuple">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_tuple</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Tuple</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_tuple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_list">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_list</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.List</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_dict">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_dict</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Dict</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_set">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_set</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Set</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_literal">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_literal</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Literal</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_literal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_shorthand">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_shorthand</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Iterable, stenotype.backend.elements.Context, stenotype.backend.elements.Awaitable, stenotype.backend.elements.AsyncIterable, stenotype.backend.elements.AsyncContext]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_shorthand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_shorthand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-stenotype.backend.typing">
+<span id="stenotype-backend-typing-module"></span><h2>stenotype.backend.typing module<a class="headerlink" href="#module-stenotype.backend.typing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><span class="sig-paren">)</span> &#x2192; Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier]<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize any element representation to the subset supported by typing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_identity">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_identity</code><span class="sig-paren">(</span><em class="sig-param">element: ID</em><span class="sig-paren">)</span> &#x2192; ID<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_identity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_generic">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_generic</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Generic</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_generic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_any">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_any</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Any</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Identifier<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_any"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_any" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_optional">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_optional</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Optional</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_optional"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_optional" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_union">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_union</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Union</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_union" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_tuple">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_tuple</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Tuple</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_tuple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_list">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_list</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.List</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_dict">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_dict</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Dict</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_set">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_set</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Set</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_literal">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_literal</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Literal</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_literal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_shorthand">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_shorthand</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Iterable, stenotype.backend.elements.Context, stenotype.backend.elements.Awaitable, stenotype.backend.elements.AsyncIterable, stenotype.backend.elements.AsyncContext]</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_shorthand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_shorthand" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

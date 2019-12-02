@@ -9,10 +9,34 @@ stenotype.backend package
 Submodules
 ----------
 
-stenotype.backend.parser module
+stenotype.backend.elements module
+---------------------------------
+
+.. automodule:: stenotype.backend.elements
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+stenotype.backend.grammar module
+--------------------------------
+
+.. automodule:: stenotype.backend.grammar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+stenotype.backend.steno module
+------------------------------
+
+.. automodule:: stenotype.backend.steno
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+stenotype.backend.typing module
 -------------------------------
 
-.. automodule:: stenotype.backend.parser
+.. automodule:: stenotype.backend.typing
    :members:
    :undoc-members:
    :show-inheritance:

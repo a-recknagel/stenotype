@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stenotype.backend.elements &mdash; stenotype 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../_static/contentui.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/contentui.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> stenotype
+          
+
+          
+            
+            <img src="../../../_static/typewriter-48.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">stenotype CLI Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../syntax.html">Syntax Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodoc/stenotype.html">Autodocs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tooling.html">Tooling</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">stenotype</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>stenotype.backend.elements</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stenotype.backend.elements</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Steno Type Elements</span>
+
+<span class="sd">Representations of the fundamental :py:mod:`stenotype` building blocks.</span>
+<span class="sd">Each element holds the relevant information for both a :py:mod:`stenotype` and</span>
+<span class="sd">:py:mod:`typing` conversion.</span>
+
+<span class="sd">Note that all elements are represented as values, not types:</span>
+<span class="sd">A :py:class:`Steno` encodes :py:mod:`stenotype` syntax/code,</span>
+<span class="sd">not any concrete types.</span>
+<span class="sd">For example, ``Identifier(&#39;typing&#39;, &#39;List&#39;)`` is not the type :py:class:`typing.List`</span>
+<span class="sd">but represents the name ``typing.List``.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span> <span class="k">as</span> <span class="n">TupleT</span><span class="p">,</span> <span class="n">Union</span> <span class="k">as</span> <span class="n">UnionT</span>
+
+
+<div class="viewcode-block" id="Dots"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Dots">[docs]</a><span class="k">class</span> <span class="nc">Dots</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A literal ``...`` placeholder&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Dots</span> <span class="k">else</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">()&quot;</span></div>
+
+
+<div class="viewcode-block" id="Identifier"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Identifier">[docs]</a><span class="k">class</span> <span class="nc">Identifier</span><span class="p">(</span><span class="n">TupleT</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;A qualified name, such as ``typing.Tuple``&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">({&quot;, &quot;.join(map(repr, self))})&#39;</span></div>
+
+
+<div class="viewcode-block" id="Generic"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Generic">[docs]</a><span class="k">class</span> <span class="nc">Generic</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A generic type, such as ``typing.List[int]``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="n">Identifier</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">TupleT</span><span class="p">[</span><span class="n">UnionT</span><span class="p">[</span><span class="s2">&quot;Steno&quot;</span><span class="p">,</span> <span class="n">Dots</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Any"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Any">[docs]</a><span class="k">class</span> <span class="nc">Any</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Any type as ``_``, same as :py:class:`typing.Any`&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Any</span> <span class="k">else</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;Any()&quot;</span></div>
+
+
+<div class="viewcode-block" id="Optional"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Optional">[docs]</a><span class="k">class</span> <span class="nc">Optional</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Optional type as ``?base``, equivalent to ``typing.Optional[base]``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Union"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Union">[docs]</a><span class="k">class</span> <span class="nc">Union</span><span class="p">(</span><span class="n">TupleT</span><span class="p">[</span><span class="s2">&quot;Steno&quot;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Union of types as ``A or B``, equivalent to ``typing.Union[A, B]``&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">({&quot;, &quot;.join(map(repr, self))})&#39;</span></div>
+
+
+<div class="viewcode-block" id="Tuple"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Tuple">[docs]</a><span class="k">class</span> <span class="nc">Tuple</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed tuple as ``(A, B, ...)``, equivalent to ``typing.Tuple[A, B, ...]``&quot;&quot;&quot;</span>
+
+    <span class="n">elements</span><span class="p">:</span> <span class="n">TupleT</span><span class="p">[</span><span class="n">UnionT</span><span class="p">[</span><span class="s2">&quot;Steno&quot;</span><span class="p">,</span> <span class="n">Dots</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="List"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.List">[docs]</a><span class="k">class</span> <span class="nc">List</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed list as ``[values]``, equivalent to ``typing.List[values]``&quot;&quot;&quot;</span>
+
+    <span class="n">values</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Dict"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Dict">[docs]</a><span class="k">class</span> <span class="nc">Dict</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed dict as ``{keys: values}``, equivalent to ``typing.Dict[keys, values]``&quot;&quot;&quot;</span>
+
+    <span class="n">keys</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span>
+    <span class="n">values</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Set"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Set">[docs]</a><span class="k">class</span> <span class="nc">Set</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed dict as ``{values}``, equivalent to ``typing.Set[values]``&quot;&quot;&quot;</span>
+
+    <span class="n">values</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Literal"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Literal">[docs]</a><span class="k">class</span> <span class="nc">Literal</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Literal value, not a type&quot;&quot;&quot;</span>
+
+    <span class="n">value</span><span class="p">:</span> <span class="n">UnionT</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="s2">&quot;ellipsis&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Iterable"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Iterable">[docs]</a><span class="k">class</span> <span class="nc">Iterable</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed iterable as ``iter base``, equivalent to ``typing.Iterable[base]``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Context"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Context">[docs]</a><span class="k">class</span> <span class="nc">Context</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed context manager as ``with base``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Awaitable"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Awaitable">[docs]</a><span class="k">class</span> <span class="nc">Awaitable</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed awaitable as ``await base``, equivalent to ``typing.Awaitable[base]``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="AsyncIterable"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.AsyncIterable">[docs]</a><span class="k">class</span> <span class="nc">AsyncIterable</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed async iterable as ``async iter base``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="AsyncContext"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.AsyncContext">[docs]</a><span class="k">class</span> <span class="nc">AsyncContext</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed async context manager as ``async with base``&quot;&quot;&quot;</span>
+
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<span class="n">Steno</span> <span class="o">=</span> <span class="n">UnionT</span><span class="p">[</span>
+    <span class="n">Identifier</span><span class="p">,</span>
+    <span class="n">Generic</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Set</span><span class="p">,</span>
+    <span class="n">Literal</span><span class="p">,</span>
+    <span class="n">Iterable</span><span class="p">,</span>
+    <span class="n">Context</span><span class="p">,</span>
+    <span class="n">Awaitable</span><span class="p">,</span>
+    <span class="n">AsyncIterable</span><span class="p">,</span>
+    <span class="n">AsyncContext</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Arne
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

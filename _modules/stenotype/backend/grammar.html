@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stenotype.backend.grammar &mdash; stenotype 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../_static/contentui.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/contentui.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> stenotype
+          
+
+          
+            
+            <img src="../../../_static/typewriter-48.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">stenotype CLI Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../syntax.html">Syntax Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodoc/stenotype.html">Autodocs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tooling.html">Tooling</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">stenotype</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>stenotype.backend.grammar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stenotype.backend.grammar</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Grammar for parsing :py:mod:`stenotype` strings to :py:mod:`~stenotype.backend.elements`</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">keyword</span> <span class="k">import</span> <span class="n">kwlist</span>
+<span class="kn">from</span> <span class="nn">pyparsing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Word</span><span class="p">,</span>
+    <span class="n">alphas</span><span class="p">,</span>
+    <span class="n">Forward</span><span class="p">,</span>
+    <span class="n">delimitedList</span><span class="p">,</span>
+    <span class="n">Literal</span><span class="p">,</span>
+    <span class="n">Keyword</span><span class="p">,</span>
+    <span class="n">nums</span><span class="p">,</span>
+    <span class="n">Group</span><span class="p">,</span>
+    <span class="n">Suppress</span><span class="p">,</span>
+    <span class="n">OneOrMore</span><span class="p">,</span>
+    <span class="n">ParseResults</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">QuotedString</span><span class="p">,</span>
+    <span class="n">Combine</span><span class="p">,</span>
+    <span class="n">MatchFirst</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">elements</span> <span class="k">as</span> <span class="n">ste</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;parse&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">ParseResults</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Unpack the members of a :py:class:`~.ParseResults` to a :py:class:`tuple`&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">results</span><span class="p">)</span>
+
+
+<span class="c1">#: Words that are not valid identifiers</span>
+<span class="n">KEYWORDS</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">KEYWORDS</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;KEYWORD&quot;</span><span class="p">)</span>
+<span class="n">KEYWORDS</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Keyword</span><span class="p">,</span> <span class="n">kwlist</span><span class="p">)))</span>
+
+<span class="c1">#: literal `...`, e.g. in `typing.Tuple[int, ...]`, not an `Ellipsis`</span>
+<span class="n">DOTS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">())</span>
+<span class="n">KEYWORDS</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="o">*</span><span class="n">KEYWORDS</span><span class="o">.</span><span class="n">expr</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="n">DOTS</span><span class="p">))</span>
+
+<span class="c1">#: any valid typing or stenotype expression, such as `List`, `typing.List`, `?List`, ...</span>
+<span class="n">TYPE</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">TYPE</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;TYPE&quot;</span><span class="p">)</span>
+<span class="n">TYPE_exclude_UNION</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">TYPE_exclude_UNION</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;TYPE_exclude_UNION&quot;</span><span class="p">)</span>
+
+<span class="c1"># typing expressions</span>
+<span class="c1"># ==================</span>
+
+<span class="c1">#: a direct or nested reference, such as `List` or `typing.List`</span>
+<span class="n">IDENTIFIER</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">delimitedList</span><span class="p">((</span><span class="o">~</span><span class="n">KEYWORDS</span> <span class="o">+</span> <span class="n">Word</span><span class="p">(</span><span class="n">alphas</span><span class="p">))</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;IDENTIFIER&quot;</span><span class="p">),</span> <span class="n">delim</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;NAME&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">(</span><span class="o">*</span><span class="n">toks</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1">#: a subscribed reference, such as `List[...]`</span>
+<span class="n">GENERIC</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">IDENTIFIER</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">delimitedList</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">TYPE</span><span class="p">))</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;NAME &#39;[&#39; TYPE {&#39;,&#39; TYPE} &#39;]&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unpack</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+<span class="p">)</span>
+
+<span class="c1">#: any valid typing expression</span>
+<span class="n">TYPING</span> <span class="o">=</span> <span class="p">(</span><span class="n">GENERIC</span> <span class="o">|</span> <span class="n">IDENTIFIER</span><span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;GENERIC | IDENTIFIER&quot;</span><span class="p">)</span>
+
+<span class="c1"># stenotype expressions</span>
+<span class="c1"># =====================</span>
+
+<span class="c1"># Special Forms</span>
+<span class="c1"># -------------</span>
+
+<span class="c1">#: `Any` as `_`</span>
+<span class="n">ANY</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;_&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Any</span><span class="p">())</span>
+
+<span class="n">_OPTIONAL_SYMBOL</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+<span class="c1">#: `Optional[TP]` as `?TP`</span>
+<span class="n">OPTIONAL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Suppress</span><span class="p">(</span><span class="n">_OPTIONAL_SYMBOL</span><span class="p">)</span>
+    <span class="o">+</span> <span class="o">~</span><span class="n">_OPTIONAL_SYMBOL</span>
+    <span class="o">+</span> <span class="n">Group</span><span class="p">(</span><span class="n">TYPE</span><span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Optional</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;?&#39; TYPE&quot;</span><span class="p">)</span>
+
+<span class="n">_UNION_SEPARATOR</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;or&quot;</span><span class="p">)</span>
+<span class="c1">#: `Union[TA, TB]`` as ``TA or TB``</span>
+<span class="n">UNION</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">TYPE_exclude_UNION</span> <span class="o">+</span> <span class="n">OneOrMore</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="n">_UNION_SEPARATOR</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE_exclude_UNION</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;TYPE &#39;or&#39; TYPE {&#39;or&#39; TYPE}&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Union</span><span class="p">(</span><span class="o">*</span><span class="n">toks</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="n">KEYWORDS</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="o">*</span><span class="n">KEYWORDS</span><span class="o">.</span><span class="n">expr</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="n">_UNION_SEPARATOR</span><span class="p">))</span>
+<span class="c1">#: all special forms</span>
+<span class="n">SPECIALS</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="n">UNION</span><span class="p">,</span> <span class="n">ANY</span><span class="p">,</span> <span class="n">OPTIONAL</span><span class="p">))</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;UNION | ANY | OPTIONAL&quot;</span><span class="p">)</span>
+
+<span class="c1"># Containers</span>
+<span class="c1"># ----------</span>
+
+<span class="c1">#: `Tuple[TA, TB, ...]` as `(TA, TB, ...)`</span>
+<span class="n">TUPLE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">delimitedList</span><span class="p">(</span><span class="n">TYPE</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">DOTS</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;(&#39; TYPE {&#39;,&#39; TYPE} [&#39;,&#39; &#39;...&#39;] &#39;)&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">toks</span><span class="p">)))</span>
+<span class="p">)</span>
+<span class="c1">#: `List[TA]` as `[TA]`</span>
+<span class="n">LIST</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;[&#39; TYPE &#39;]&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: `Dict[TK, TV]` as `{TK: TV}`</span>
+<span class="n">DICT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;{&#39; TYPE &#39;:&#39; TYPE &#39;}&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: `Set[TA]` as `{TA}`</span>
+<span class="n">SET</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;{&#39; TYPE &#39;}&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="p">)</span>
+
+<span class="c1">#: all container literals</span>
+<span class="n">CONTAINERS</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="n">TUPLE</span><span class="p">,</span> <span class="n">LIST</span><span class="p">,</span> <span class="n">DICT</span><span class="p">,</span> <span class="n">SET</span><span class="p">))</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;TUPLE | LIST | DICT | SET&quot;</span><span class="p">)</span>
+
+<span class="c1"># Literals</span>
+<span class="c1"># --------</span>
+
+<span class="c1">#: a literal bool, i.e. `True` or `False`</span>
+<span class="n">LITERAL_BOOL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;True&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;False&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;True&#39; | &#39;False&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span>
+        <span class="k">else</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="c1">#: a literal `None`</span>
+<span class="n">LITERAL_NONE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;None&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="c1">#: a literal `Ellipsis` or `...`</span>
+<span class="n">LITERAL_ELLIPSIS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;Ellipsis&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;Ellipsis&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="bp">Ellipsis</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="c1">#: any literal `int`</span>
+<span class="n">LITERAL_INT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Combine</span><span class="p">(</span><span class="n">Optional</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Word</span><span class="p">(</span><span class="n">nums</span><span class="p">)))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+<span class="p">)</span>
+<span class="n">_string_opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">unquoteResults</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">convertWhitespaceEscapes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1">#: any literal `str`</span>
+<span class="n">LITERAL_STR</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">QuotedString</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="n">escChar</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_string_opts</span><span class="p">)</span>
+        <span class="o">|</span> <span class="n">QuotedString</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="n">escChar</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_string_opts</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;STRING&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: any literal `bytes`</span>
+<span class="n">LITERAL_BYTES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;b&quot;</span>
+        <span class="o">+</span> <span class="p">(</span>
+            <span class="n">QuotedString</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="n">escChar</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_string_opts</span><span class="p">)</span>
+            <span class="o">|</span> <span class="n">QuotedString</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="n">escChar</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_string_opts</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;BYTES&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;b&quot;</span> <span class="o">+</span> <span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1"># TODO: float (does this even make sense? float is notoriously bad for precise values)</span>
+
+<span class="n">KEYWORDS</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span><span class="o">*</span><span class="n">KEYWORDS</span><span class="o">.</span><span class="n">expr</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="n">LITERAL_BOOL</span><span class="p">,</span> <span class="n">LITERAL_NONE</span><span class="p">,</span> <span class="n">LITERAL_ELLIPSIS</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1">#: all literal values</span>
+<span class="n">LITERALS</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">LITERAL_BOOL</span><span class="p">,</span>
+        <span class="n">LITERAL_NONE</span><span class="p">,</span>
+        <span class="n">LITERAL_ELLIPSIS</span><span class="p">,</span>
+        <span class="n">LITERAL_INT</span><span class="p">,</span>
+        <span class="n">LITERAL_STR</span><span class="p">,</span>
+        <span class="n">LITERAL_BYTES</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span>
+    <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="s2">&quot;LITERAL_BOOL&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;LITERAL_NONE&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;LITERAL_ELLIPSIS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;LITERAL_INT&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;LITERAL_STR&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Shorthands</span>
+<span class="c1"># ----------</span>
+
+<span class="c1">#: `Iterable[T]` as `iter T`</span>
+<span class="n">ITERABLE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;iter&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;iter&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Iterable</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: `ContextManager[T]` as `with T`</span>
+<span class="n">CONTEXT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;with&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;with&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: `Awaitable[T]` as `await T`</span>
+<span class="n">AWAITABLE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;await&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;await&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: `AsyncIterable[T]` as `async iter T`</span>
+<span class="n">ASYNC_ITERABLE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;async iter&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;async iter&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">AsyncIterable</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="c1">#: `AsyncContextManager[T]` as `async with T`</span>
+<span class="n">ASYNC_CONTEXT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;async with&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;async with&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">AsyncContext</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+
+<span class="n">KEYWORDS</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span>
+        <span class="o">*</span><span class="n">KEYWORDS</span><span class="o">.</span><span class="n">expr</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span>
+        <span class="n">ITERABLE</span><span class="o">.</span><span class="n">exprs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">CONTEXT</span><span class="o">.</span><span class="n">exprs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">AWAITABLE</span><span class="o">.</span><span class="n">exprs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ASYNC_ITERABLE</span><span class="o">.</span><span class="n">exprs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ASYNC_CONTEXT</span><span class="o">.</span><span class="n">exprs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="c1">#: all shorthand notations</span>
+<span class="n">SHORTHANDS</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">ITERABLE</span><span class="p">,</span> <span class="n">CONTEXT</span><span class="p">,</span> <span class="n">AWAITABLE</span><span class="p">,</span> <span class="n">ASYNC_ITERABLE</span><span class="p">,</span> <span class="n">ASYNC_CONTEXT</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span>
+    <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s2">&quot;ITERABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;CONTEXT&quot;</span><span class="p">,</span> <span class="s2">&quot;AWAITABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;ASYNC_ITERABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;ASYNC_CONTEXT&quot;</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1">#: any valid stenotype expression</span>
+<span class="n">STENOTYPE</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span><span class="o">*</span><span class="n">SPECIALS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">CONTAINERS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">LITERALS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">SHORTHANDS</span><span class="o">.</span><span class="n">exprs</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;SPECIALS | CONTAINERS | LITERALS | SHORTHANDS&quot;</span><span class="p">)</span>
+
+<span class="n">TYPE</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="o">*</span><span class="n">STENOTYPE</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">TYPING</span><span class="o">.</span><span class="n">exprs</span><span class="p">))</span>
+<span class="n">TYPE_exclude_UNION</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">CONTAINERS</span> <span class="o">|</span> <span class="n">LITERALS</span> <span class="o">|</span> <span class="n">SHORTHANDS</span> <span class="o">|</span> <span class="n">ANY</span> <span class="o">|</span> <span class="n">OPTIONAL</span> <span class="o">|</span> <span class="n">TYPING</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.grammar.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">steno_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ste</span><span class="o">.</span><span class="n">Steno</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parse a stenotype or typing string to element representation&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">TYPE</span><span class="o">.</span><span class="n">parseString</span><span class="p">(</span><span class="n">steno_string</span><span class="p">,</span> <span class="n">parseAll</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Arne
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

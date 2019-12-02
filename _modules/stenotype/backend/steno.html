@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stenotype.backend.steno &mdash; stenotype 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../_static/contentui.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/contentui.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> stenotype
+          
+
+          
+            
+            <img src="../../../_static/typewriter-48.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">stenotype CLI Directive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../syntax.html">Syntax Definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autodoc/stenotype.html">Autodocs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tooling.html">Tooling</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">stenotype</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>stenotype.backend.steno</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stenotype.backend.steno</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">singledispatch</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">elements</span> <span class="k">as</span> <span class="n">ste</span>
+
+
+<div class="viewcode-block" id="unparse"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse">[docs]</a><span class="nd">@singledispatch</span>
+<span class="k">def</span> <span class="nf">unparse</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Steno</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Unparse element representation to a stenotype string&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="n">f</span><span class="s2">&quot;</span><span class="si">{element.__class__.__name__!r}</span><span class="s2"> cannot be represented as a stenotype yet&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unparse_dots"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_dots">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_dots</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;...&quot;</span></div>
+
+
+<span class="c1"># typing expressions</span>
+<span class="c1"># ==================</span>
+
+
+<div class="viewcode-block" id="unparse_identifier"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_identifier">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_identifier</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">element</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unparse_generic"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_generic">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_generic</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;{unparse(element.base)}[{&quot;, &quot;.join(map(unparse, element.parameters))}]&#39;</span></div>
+
+
+<span class="c1"># stenotype expressions</span>
+<span class="c1"># =====================</span>
+
+<span class="c1"># Special Forms</span>
+<span class="c1"># -------------</span>
+
+
+<div class="viewcode-block" id="unparse_any"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_any">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_any</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;_&quot;</span></div>
+
+
+<div class="viewcode-block" id="unparse_optional"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_optional">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Optional</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_optional</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Optional</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="n">unparse</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">base</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unparse_union"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_union">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Union</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_union</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Union</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">unparse</span><span class="p">,</span> <span class="n">element</span><span class="p">))</span></div>
+
+
+<span class="c1"># Containers</span>
+<span class="c1"># ----------</span>
+
+
+<div class="viewcode-block" id="unparse_tuple"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_tuple">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Tuple</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_tuple</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;({&quot;, &quot;.join(map(unparse, element.elements))})&#39;</span></div>
+
+
+<div class="viewcode-block" id="unparse_list"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_list">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">List</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_list</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;[{unparse(element.values)}]&quot;</span></div>
+
+
+<div class="viewcode-block" id="unparse_dict"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_dict">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_dict</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;{{{unparse(element.keys)}: {unparse(element.values)}}}&quot;</span></div>
+
+
+<div class="viewcode-block" id="unparse_set"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_set">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Set</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_set</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;{{{unparse(element.values)}}}&quot;</span></div>
+
+
+<span class="c1"># Literals</span>
+<span class="c1"># --------</span>
+
+
+<div class="viewcode-block" id="unparse_literal"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_literal">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_literal</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Literal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<span class="c1"># Shorthands</span>
+<span class="c1"># ----------</span>
+
+
+<span class="n">SHORTHAND</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ste</span><span class="o">.</span><span class="n">Iterable</span><span class="p">:</span> <span class="s2">&quot;iter&quot;</span><span class="p">,</span>
+    <span class="n">ste</span><span class="o">.</span><span class="n">Context</span><span class="p">:</span> <span class="s2">&quot;with&quot;</span><span class="p">,</span>
+    <span class="n">ste</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">:</span> <span class="s2">&quot;await&quot;</span><span class="p">,</span>
+    <span class="n">ste</span><span class="o">.</span><span class="n">AsyncIterable</span><span class="p">:</span> <span class="s2">&quot;async iter&quot;</span><span class="p">,</span>
+    <span class="n">ste</span><span class="o">.</span><span class="n">AsyncContext</span><span class="p">:</span> <span class="s2">&quot;async with&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="unparse_shorthand"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_shorthand">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Iterable</span><span class="p">)</span>
+<span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Context</span><span class="p">)</span>
+<span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">)</span>
+<span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">AsyncIterable</span><span class="p">)</span>
+<span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">AsyncContext</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_shorthand</span><span class="p">(</span>
+    <span class="n">element</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">ste</span><span class="o">.</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">AsyncIterable</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">AsyncContext</span>
+    <span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{SHORTHAND[type(element)]}</span><span class="s2"> {unparse(element.base)}&quot;</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Arne
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
