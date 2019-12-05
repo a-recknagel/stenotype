@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stenotype.backend.steno &mdash; stenotype 0.1.0 documentation</title>
+  <title>stenotype.backend.steno &mdash; stenotype 0.2.0 documentation</title>
   
 
   
@@ -151,17 +151,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for stenotype.backend.steno</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">singledispatch</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">elements</span> <span class="k">as</span> <span class="n">ste</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">elements</span> <span class="k">as</span> <span class="n">ste</span>
 
 
 <div class="viewcode-block" id="unparse"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse">[docs]</a><span class="nd">@singledispatch</span>
 <span class="k">def</span> <span class="nf">unparse</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Steno</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Unparse element representation to a stenotype string&quot;&quot;&quot;</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-        <span class="n">f</span><span class="s2">&quot;</span><span class="si">{element.__class__.__name__!r}</span><span class="s2"> cannot be represented as a stenotype yet&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{element.__class__.__name__!r}</span><span class="s2"> cannot be represented as a stenotype yet&quot;</span>
     <span class="p">)</span></div>
 
 
@@ -181,7 +181,7 @@
 
 <div class="viewcode-block" id="unparse_generic"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_generic">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">unparse_generic</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;{unparse(element.base)}[{&quot;, &quot;.join(map(unparse, element.parameters))}]&#39;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;{unparse(element.base)}[{&quot;, &quot;.join(map(unparse, element.parameters))}]&#39;</span></div>
 
 
 <span class="c1"># stenotype expressions</span>
@@ -212,22 +212,22 @@
 
 <div class="viewcode-block" id="unparse_tuple"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_tuple">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Tuple</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">unparse_tuple</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;({&quot;, &quot;.join(map(unparse, element.elements))})&#39;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;({&quot;, &quot;.join(map(unparse, element.elements))})&#39;</span></div>
 
 
 <div class="viewcode-block" id="unparse_list"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_list">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">List</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">unparse_list</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;[{unparse(element.values)}]&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[{unparse(element.values)}]&quot;</span></div>
 
 
 <div class="viewcode-block" id="unparse_dict"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_dict">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">unparse_dict</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;{{{unparse(element.keys)}: {unparse(element.values)}}}&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{{{unparse(element.keys)}: {unparse(element.values)}}}&quot;</span></div>
 
 
 <div class="viewcode-block" id="unparse_set"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_set">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Set</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">unparse_set</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;{{{unparse(element.values)}}}&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{{{unparse(element.values)}}}&quot;</span></div>
 
 
 <span class="c1"># Literals</span>
@@ -262,7 +262,7 @@
         <span class="n">ste</span><span class="o">.</span><span class="n">Iterable</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Awaitable</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">AsyncIterable</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">AsyncContext</span>
     <span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{SHORTHAND[type(element)]}</span><span class="s2"> {unparse(element.base)}&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{SHORTHAND[type(element)]}</span><span class="s2"> {unparse(element.base)}&quot;</span></div>
 </pre></div>
 
            </div>

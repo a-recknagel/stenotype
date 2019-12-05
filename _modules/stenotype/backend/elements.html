@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stenotype.backend.elements &mdash; stenotype 0.1.0 documentation</title>
+  <title>stenotype.backend.elements &mdash; stenotype 0.2.0 documentation</title>
   
 
   
@@ -164,7 +164,7 @@
 <span class="sd">For example, ``Identifier(&#39;typing&#39;, &#39;List&#39;)`` is not the type :py:class:`typing.List`</span>
 <span class="sd">but represents the name ``typing.List``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span> <span class="k">as</span> <span class="n">TupleT</span><span class="p">,</span> <span class="n">Union</span> <span class="k">as</span> <span class="n">UnionT</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span> <span class="k">as</span> <span class="n">TupleT</span><span class="p">,</span> <span class="n">Union</span> <span class="k">as</span> <span class="n">UnionT</span>
 
 
 <div class="viewcode-block" id="Dots"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Dots">[docs]</a><span class="k">class</span> <span class="nc">Dots</span><span class="p">:</span>
@@ -172,21 +172,21 @@
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Dots</span> <span class="k">else</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">()&quot;</span></div>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">()&quot;</span></div>
 
 
 <div class="viewcode-block" id="Identifier"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Identifier">[docs]</a><span class="k">class</span> <span class="nc">Identifier</span><span class="p">(</span><span class="n">TupleT</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;A qualified name, such as ``typing.Tuple``&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">({&quot;, &quot;.join(map(repr, self))})&#39;</span></div>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">({&quot;, &quot;.join(map(repr, self))})&#39;</span></div>
 
 
 <div class="viewcode-block" id="Generic"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Generic">[docs]</a><span class="k">class</span> <span class="nc">Generic</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -201,11 +201,11 @@
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Any</span> <span class="k">else</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;Any()&quot;</span></div>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Any()&quot;</span></div>
 
 
 <div class="viewcode-block" id="Optional"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Optional">[docs]</a><span class="k">class</span> <span class="nc">Optional</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -217,11 +217,11 @@
 <div class="viewcode-block" id="Union"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Union">[docs]</a><span class="k">class</span> <span class="nc">Union</span><span class="p">(</span><span class="n">TupleT</span><span class="p">[</span><span class="s2">&quot;Steno&quot;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Union of types as ``A or B``, equivalent to ``typing.Union[A, B]``&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">elements</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">({&quot;, &quot;.join(map(repr, self))})&#39;</span></div>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">({&quot;, &quot;.join(map(repr, self))})&#39;</span></div>
 
 
 <div class="viewcode-block" id="Tuple"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Tuple">[docs]</a><span class="k">class</span> <span class="nc">Tuple</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>

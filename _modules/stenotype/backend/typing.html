@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stenotype.backend.typing &mdash; stenotype 0.1.0 documentation</title>
+  <title>stenotype.backend.typing &mdash; stenotype 0.2.0 documentation</title>
   
 
   
@@ -151,17 +151,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for stenotype.backend.typing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">singledispatch</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">singledispatch</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">elements</span> <span class="k">as</span> <span class="n">ste</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">elements</span> <span class="k">as</span> <span class="n">ste</span>
 
 
 <div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.typing.normalize">[docs]</a><span class="nd">@singledispatch</span>
 <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Steno</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Normalize any element representation to the subset supported by typing&quot;&quot;&quot;</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-        <span class="n">f</span><span class="s2">&quot;</span><span class="si">{element.__class__.__name__!r}</span><span class="s2"> cannot be represented via typing yet&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{element.__class__.__name__!r}</span><span class="s2"> cannot be represented via typing yet&quot;</span>
     <span class="p">)</span></div>
 
 
