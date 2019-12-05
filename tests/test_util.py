@@ -1,8 +1,9 @@
+import logging
+
 from stenotype.util import setup_logging
 
 
 def test_setup_logging():
-    import logging
 
     # default settings
     assert logging.root.level == 30

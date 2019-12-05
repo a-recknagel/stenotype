@@ -23,7 +23,7 @@ jobs:
         env:
           POETRY_VIRTUALENVS_CREATE: false
         run: |
-          pip install poetry==1.0.0b1  # FIXME: need pre-release for export
+          pip install poetry==1.0.0b3  # FIXME: need pre-release for export
           poetry install
       - name: Building package as artifact
         run: poetry build

@@ -8,7 +8,9 @@ from logging import getLogger
 
 import click
 
-from stenotype.backend import parser
+from stenotype.backend.grammar import parse
+from stenotype.backend.steno import unparse
+from stenotype.backend.typing import normalize as to_typing
 from stenotype import util, __version__
 
 log = getLogger(__name__)
@@ -75,7 +77,11 @@ def cli(args, version, loglevel, shorten, check):
 
     util.setup_logging(loglevel)
     try:
-        for expression in parser.parse(args, invert=shorten):
+        if shorten:
+            expressions = (f"stub inverse function: {arg}" for arg in args)
+        else:
+            expressions = (unparse(to_typing(parse(arg))) for arg in args)
+        for expression in expressions:
             click.echo(expression)
     except util.StenotypeException as e:
         click.echo(e, err=True)

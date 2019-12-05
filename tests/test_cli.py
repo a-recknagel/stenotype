@@ -4,17 +4,13 @@ from stenotype.util import StenotypeException
 def test_usage(test_cli):
     result = test_cli("?int")
     assert result.exit_code == 0
-    assert result.stdout == "stub parse function: ?int\n"
-    # should be "typing.Optional[int]"
+    assert result.stdout == "typing.Optional[int]\n"
 
 
 def test_multi_usage(test_cli):
     result = test_cli("?int", "?bool")
     assert result.exit_code == 0
-    assert result.stdout == (
-        "stub parse function: ?int\n" "stub parse function: ?bool\n"
-    )
-    # should be "typing.Optional[int]" "typing.Optional[bool]"
+    assert result.stdout == "typing.Optional[int]\n" "typing.Optional[bool]\n"
 
 
 def test_version(test_cli):
@@ -47,12 +43,12 @@ def test_shorten(test_cli):
 
 
 def test_parser_exception(test_cli, monkeypatch):
-    from stenotype import cli  # need module for monkeypatch
+    from stenotype import cli
 
-    def parse_that_fails(*args, **kwargs):
+    def parse_that_fails(*_, **__):
         raise StenotypeException("test message")
 
-    monkeypatch.setattr(cli.parser, "parse", parse_that_fails)
+    monkeypatch.setattr(cli, "parse", parse_that_fails)
 
     result = test_cli("?int")
     assert result.exit_code == 1
