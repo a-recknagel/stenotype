@@ -9,6 +9,8 @@ jobs:
     strategy:
       matrix:
         python: ['3.6']  # add pypy3.6 here as soon as it's supported
+    env:
+      POETRY_VIRTUALENVS_CREATE: false
     steps:
 
       # setup python environment
@@ -17,14 +19,13 @@ jobs:
           python-version: ${{ matrix.python }}
           architecture: 'x64'
       - uses: actions/checkout@v1
+      - uses: dschep/install-poetry-action@v1.2
+        with:
+          version: 1.0.0b8
 
       # run CI pipeline
       - name: Installing package
-        env:
-          POETRY_VIRTUALENVS_CREATE: false
-        run: |
-          pip install poetry==1.0.0b3  # FIXME: need pre-release for export
-          poetry install
+        run: poetry install
       - name: Building package as artifact
         run: poetry build
       - name: Building documentation
@@ -86,9 +87,12 @@ jobs:
         with:
           name: distributions
           path: dist
+      - uses: dschep/install-poetry-action@v1.2
+        with:
+          version: 1.0.0b8
       - name: Deploy new package version to pypi
         if: github.ref == 'refs/heads/master'
         run: |
           echo "Here is where the code will be published once it actually does something."
-          # pip install poetry
-          # poetry publish -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }} artifacts/packages/*
+          # poetry config repositories.github https://github.com/a-recknagel/stenotype/packages
+          # poetry publish -r github -u ${{ secrets.GITHUB_TOKEN }} -p ${{ secrets.GITHUB_TOKEN }} artifacts/packages/*

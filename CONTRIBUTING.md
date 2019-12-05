@@ -31,8 +31,7 @@ the project in a new virtual environment, which should be all you need
 to do to start contributing.
 
 If your shell can't find the virtual env on its own, run `poetry shell`,
-after which all tools and the `stenotype` cli should work properly - if
-they don't that's a bug, please post an issue 😁
+after which all tools and the `stenotype` cli should work properly.
 
 
 ## CI pipeline
@@ -41,7 +40,7 @@ Any pull request needs to pass
 [the CI](https://github.com/a-recknagel/stenotype/actions?workflow=CI-CD)
 before it can be merged. The most important ones are formatting (`black
 src/ tests/`), unit tests (`pytest tests/`), and static typing (`mypy
-src/`), be sure to run them before pushing.
+src/`), be sure to run those commands locally before every push.
 
 For details, check the 
 [tooling](https://a-recknagel.github.io/stenotype/tooling.html) section
@@ -62,7 +61,8 @@ An issue can be created for any of the following cases:
    make sure it is reproducible
  - <span style="background-color:#A2EEEF;color:#252525">enhancement</span> -
    aka feature request
- - <span style="background-color:#D876E3;color:#252525">question</span>
+ - <span style="background-color:#D876E3;color:#252525">question</span> - 
+   whatever you feel like asking
  
 If you plan to write one, please take care that yours falls among them 
 and tag it accordingly.

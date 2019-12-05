@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "stenotype"
-version = "0.1.0"
+version = "0.2.0"
 description = "Support for shorthand type annotations."
 license = "MIT"
-authors = ["Arne Recknagel <arne.recknagel@hotmail.com>"]
+authors = [
+    "Arne Recknagel <arne.recknagel@hotmail.com>",
+    "Max Fischer <maxfischer2781@gmail.com>"
+]
 readme = "README.rst"
 repository = "https://github.com/a-recknagel/stenotype"
 keywords = ["typing","annotation"]
@@ -23,7 +26,7 @@ pyfakefs = "^3.6"
 mypy = "^0.670.0"
 safety = "^1.8"
 bandit = "^1.5"
-black = {version = "^18.3-alpha.0",allows-prereleases = true}
+black = {version = "^19",allow-prereleases = true}
 sphinx = "^2.0"
 sphinx-click = "^2.1"
 sphinxcontrib-contentui = "^0.2.4"
