@@ -162,6 +162,7 @@ Steno = UnionT[
     Generic,
     Any,
     Optional,
+    Tuple,
     List,
     Dict,
     Set,
