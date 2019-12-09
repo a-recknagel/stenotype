@@ -157,6 +157,13 @@ class Signature(NamedTuple):
     returns: "Steno"
 
 
+class Callable(NamedTuple):
+    """Typed positional signature as ``(A, B, /, C, D) -> R``"""
+
+    positional: "OptionalT[TupleT[Steno]]"
+    returns: "Steno"
+
+
 Steno = UnionT[
     Identifier,
     Generic,
