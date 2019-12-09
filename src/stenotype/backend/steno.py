@@ -31,6 +31,18 @@ def unparse_generic(element: ste.Generic) -> str:
     return f'{unparse(element.base)}[{", ".join(map(unparse, element.parameters))}]'
 
 
+@unparse.register(ste.Callable)
+def unparse_callable(element: ste.Callable) -> str:
+    base = ste.Identifier('typing', 'Callable')
+    if element.positional is None:
+        return f'{unparse(base)}[..., {unparse(element.returns)}]'
+    return (
+        f'{unparse(base)}['
+        + f'[{", ".join(map(unparse, element.positional))}]'
+        + f', {unparse(element.returns)}]'
+    )
+
+
 # stenotype expressions
 # =====================
 
