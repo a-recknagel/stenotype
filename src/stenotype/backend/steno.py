@@ -33,13 +33,13 @@ def unparse_generic(element: ste.Generic) -> str:
 
 @unparse.register(ste.Callable)
 def unparse_callable(element: ste.Callable) -> str:
-    base = ste.Identifier('typing', 'Callable')
+    base = ste.Identifier("typing", "Callable")
     if element.positional is None:
-        return f'{unparse(base)}[..., {unparse(element.returns)}]'
+        return f"{unparse(base)}[..., {unparse(element.returns)}]"
     return (
-        f'{unparse(base)}['
+        f"{unparse(base)}["
         + f'[{", ".join(map(unparse, element.positional))}]'
-        + f', {unparse(element.returns)}]'
+        + f", {unparse(element.returns)}]"
     )
 
 
