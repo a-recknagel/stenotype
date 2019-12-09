@@ -297,11 +297,7 @@ SIGNATURE_MIXED = (
     .setResultsName("mixed")
 )
 SIGNATURE_ARGS = (
-    Suppress("*")
-    + (
-        Optional(PARAMETER, default=None)
-        .setResultsName("args")
-    )
+    Suppress("*") + (Optional(PARAMETER, default=None).setResultsName("args"))
 ).setName("'*' [TYPE]")
 SIGNATURE_KEYWORDS = (
     delimitedList(NAMED_PARAMETER)
