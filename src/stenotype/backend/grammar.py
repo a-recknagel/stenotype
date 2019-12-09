@@ -362,7 +362,7 @@ SIGNATURE = (
 
 #: any valid stenotype expression
 STENOTYPE = MatchFirst(
-    (*SPECIALS.exprs, *CONTAINERS.exprs, *LITERALS.exprs, *SHORTHANDS.exprs)
+    (SIGNATURE, *SPECIALS.exprs, *CONTAINERS.exprs, *LITERALS.exprs, *SHORTHANDS.exprs)
 ).setName("SPECIALS | CONTAINERS | LITERALS | SHORTHANDS")
 
 TYPE << MatchFirst((*STENOTYPE.exprs, *TYPING.exprs))

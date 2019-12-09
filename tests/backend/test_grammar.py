@@ -200,7 +200,7 @@ def test_shorthands(steno, parsed):
 
 @pytest.mark.parametrize("steno, parsed", signatures)
 def test_signatures(steno, parsed):
-    assert SIGNATURE.parseString(steno)[0] == parsed
+    assert parse(steno) == parsed
 
 
 def test_tricky_tuples():
