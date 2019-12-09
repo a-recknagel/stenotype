@@ -11,7 +11,7 @@ not any concrete types.
 For example, ``Identifier('typing', 'List')`` is not the type :py:class:`typing.List`
 but represents the name ``typing.List``.
 """
-from typing import NamedTuple, Tuple as TupleT, Union as UnionT
+from typing import NamedTuple, Tuple as TupleT, Union as UnionT, Optional as OptionalT
 
 
 class Dots:
@@ -132,6 +132,31 @@ class AsyncContext(NamedTuple):
     base: "Steno"
 
 
+class Parameter(NamedTuple):
+    """Typed parameter of a call signature as ``name: base``"""
+
+    name: OptionalT[str]
+    base: "Steno"
+    # Do we need a default value?
+
+
+class Signature(NamedTuple):
+    """Typed signature as ``(p: P, /, m: M, *a: A, k: K, **kw: KW) -> R``"""
+
+    #: positional only parameters, e.g. ``(a: A, b:B, /)``
+    positional: TupleT[Parameter, ...]
+    #: positional or keyword parameters, e.g. ``(a: A, b: B)``
+    mixed: TupleT[Parameter, ...]
+    #: variadic positional parameters, e.g. ``(*args: ARGS)``
+    args: OptionalT[Parameter]
+    #: keyword only parameters, e.g. ``(*, a: A, b: B)``
+    keywords: TupleT[Parameter, ...]
+    #: variadic keyword parameters, e.g. ``(**kwargs: KWARGS)``
+    kwargs: OptionalT[Parameter]
+    #: return type, e.g. ``() -> R``
+    returns: "Steno"
+
+
 Steno = UnionT[
     Identifier,
     Generic,
@@ -146,4 +171,5 @@ Steno = UnionT[
     Awaitable,
     AsyncIterable,
     AsyncContext,
+    Signature,
 ]
