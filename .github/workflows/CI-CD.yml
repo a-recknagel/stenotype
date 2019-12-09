@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        python: ['3.6']  # add pypy3.6 here as soon as it's supported
+        python: ['3.6', 'pypy3']
     env:
       POETRY_VIRTUALENVS_CREATE: false
     steps:
@@ -24,6 +24,11 @@ jobs:
           version: 1.0.0b8
 
       # run CI pipeline
+      - name: Exclude typed-ast dependents for pypy
+        if: matrix.python == 'pypy3'
+        run: |
+          sed -i '/mypy =/d' pyproject.toml
+          sed -i '/black =/d' pyproject.toml
       - name: Installing package
         run: poetry install
       - name: Building package as artifact
@@ -33,11 +38,16 @@ jobs:
           sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
           sphinx-build docs/ public/ -b html
       - name: Make sure the project is black
+        if: matrix.python != 'pypy3'
         run: black src/ tests/ --check
       - name: Static typing test with mypy
+        if: matrix.python != 'pypy3'
         run: mypy src/
       - name: Running test suite
         run: pytest tests/
+      - name: Running mypy interoperability tests
+        if: matrix.python != 'pypy3'
+        run: pytest tests/ --mypy
       - name: Running test coverage
         run: pytest tests/ --cov
       - name: Test dependencies for known issues
