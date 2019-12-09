@@ -43,6 +43,22 @@ shorthands = [
     ("async iter foo", ste.AsyncIterable(base=ste.Literal("foo"))),
     ("async with foo", ste.AsyncContext(base=ste.Literal("foo"))),
 ]
+callables = [
+    ("Callable[..., R]", ste.Callable(positional=None, returns=ste.Identifier("R"))),
+    ("typing.Callable[..., R]", ste.Callable(
+        positional=None, returns=ste.Identifier("R")
+    )),
+    ("Callable[[A], R]", ste.Callable(
+        positional=(ste.Identifier("A"),),
+        returns=ste.Identifier("R")
+    )),
+    ("typing.Callable[[A, B, C], R]", ste.Callable(
+        positional=(
+            ste.Identifier("A"), ste.Identifier("B"), ste.Identifier("C"),
+        ),
+        returns=ste.Identifier("R")
+    )),
+]
 signatures = [
     ("(A, /) -> R", ste.Signature(
         positional=(ste.Parameter(name=None, base=ste.Identifier('A')),),
@@ -195,6 +211,11 @@ def test_containers(steno, parsed):
 
 @pytest.mark.parametrize("steno, parsed", shorthands)
 def test_shorthands(steno, parsed):
+    assert parse(steno) == parsed
+
+
+@pytest.mark.parametrize("steno, parsed", callables)
+def test_callables(steno, parsed):
     assert parse(steno) == parsed
 
 

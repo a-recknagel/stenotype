@@ -63,8 +63,35 @@ GENERIC = (
     .setParseAction(lambda s, loc, toks: ste.Generic(toks[0], unpack(toks[1:])))
 )
 
+# TODO: Should we support aliases to ``typing``?
+CALLABLE_BASE = Optional(Suppress("typing") + Suppress(".")) + Suppress(
+    Keyword("Callable")
+)
+#: a partial ``typing.Callable`` expression, such as ``Callable[..., R]``
+CALLABLE_RETURN = (
+    CALLABLE_BASE
+    + Suppress("[")
+    + Suppress("...")
+    + Suppress(",")
+    + TYPE
+    + Suppress("]")
+).setParseAction(lambda s, loc, toks: ste.Callable(None, toks[0]))
+#: a full ``typing.Callable`` expression, such as ``Callable[[A, B, C], R]``
+CALLABLE_POSITIONAL = (
+    CALLABLE_BASE
+    + Suppress("[")
+    + Suppress("[")
+    + delimitedList(Group(TYPE))
+    + Suppress("]")
+    + Suppress(",")
+    + TYPE
+    + Suppress("]")
+).setParseAction(lambda s, loc, toks: ste.Callable(unpack(toks[:-1]), toks[-1]))
+
 #: any valid typing expression
-TYPING = (GENERIC | IDENTIFIER).setName("GENERIC | IDENTIFIER")
+TYPING = MatchFirst(
+    (CALLABLE_RETURN, CALLABLE_POSITIONAL, GENERIC, IDENTIFIER)
+).setName("CALLABLE | GENERIC | IDENTIFIER")
 
 # stenotype expressions
 # =====================
