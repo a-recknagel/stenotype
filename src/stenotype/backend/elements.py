@@ -160,7 +160,7 @@ class Signature(NamedTuple):
 class Callable(NamedTuple):
     """Typed positional signature as ``(A, B, /, C, D) -> R``"""
 
-    positional: "OptionalT[TupleT[Steno]]"
+    positional: "OptionalT[TupleT[Steno, ...]]"
     returns: "Steno"
 
 
