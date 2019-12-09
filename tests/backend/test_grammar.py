@@ -1,7 +1,8 @@
 import pytest
 
 from stenotype.backend import elements as ste
-from stenotype.backend.grammar import parse
+from stenotype.backend.grammar import parse, SIGNATURE
+
 
 # fmt: off
 literals = [True, False, Ellipsis, None, 1234, 1337, -1, '"foo bar"', 'b"foo bar"']
@@ -42,6 +43,127 @@ shorthands = [
     ("async iter foo", ste.AsyncIterable(base=ste.Literal("foo"))),
     ("async with foo", ste.AsyncContext(base=ste.Literal("foo"))),
 ]
+signatures = [
+    ("(A, /) -> R", ste.Signature(
+        positional=(ste.Parameter(name=None, base=ste.Identifier('A')),),
+        mixed=(),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(A, B, /) -> R", ste.Signature(
+        positional=(
+            ste.Parameter(name=None, base=ste.Identifier('A')),
+            ste.Parameter(name=None, base=ste.Identifier('B'))
+        ),
+        mixed=(),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(A) -> R", ste.Signature(
+        positional=(),
+        mixed=(ste.Parameter(name=None, base=ste.Identifier('A')),),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(A, B) -> R", ste.Signature(
+        positional=(),
+        mixed=(
+            ste.Parameter(name=None, base=ste.Identifier('A')),
+            ste.Parameter(name=None, base=ste.Identifier('B')),
+        ),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(a: A) -> R", ste.Signature(
+        positional=(),
+        mixed=(ste.Parameter(name='a', base=ste.Identifier('A')),),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(a: A, b: B) -> R", ste.Signature(
+        positional=(),
+        mixed=(
+            ste.Parameter(name='a', base=ste.Identifier('A')),
+            ste.Parameter(name='b', base=ste.Identifier('B')),
+        ),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(A, b: B) -> R", ste.Signature(
+        positional=(),
+        mixed=(
+            ste.Parameter(name=None, base=ste.Identifier('A')),
+            ste.Parameter(name='b', base=ste.Identifier('B')),
+        ),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(A, b: B, *) -> R", ste.Signature(
+        positional=(),
+        mixed=(
+            ste.Parameter(name=None, base=ste.Identifier('A')),
+            ste.Parameter(name='b', base=ste.Identifier('B')),
+        ),
+        args=None,
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(*a: A) -> R", ste.Signature(
+        positional=(),
+        mixed=(),
+        args=ste.Parameter(name='a', base=ste.Identifier('A')),
+        keywords=(),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(*, a: A) -> R", ste.Signature(
+        positional=(),
+        mixed=(),
+        args=None,
+        keywords=(ste.Parameter(name='a', base=ste.Identifier('A')),),
+        kwargs=None,
+        returns=ste.Identifier('R'),
+    )),
+    ("(*, **a: A) -> R", ste.Signature(
+        positional=(),
+        mixed=(),
+        args=None,
+        keywords=(),
+        kwargs=ste.Parameter(name='a', base=ste.Identifier('A')),
+        returns=ste.Identifier('R'),
+    )),
+    ("(a: A, B, /, C, d: D, *e: E, f: F, **g: G) -> R", ste.Signature(
+        positional=(
+            ste.Parameter(name='a', base=ste.Identifier('A')),
+            ste.Parameter(name=None, base=ste.Identifier('B')),
+        ),
+        mixed=(
+            ste.Parameter(name=None, base=ste.Identifier('C')),
+            ste.Parameter(name='d', base=ste.Identifier('D')),
+        ),
+        args=ste.Parameter(name='e', base=ste.Identifier('E')),
+        keywords=(
+            ste.Parameter(name='f', base=ste.Identifier('F')),
+        ),
+        kwargs=ste.Parameter(name='g', base=ste.Identifier('G')),
+        returns=ste.Identifier('R'),
+    )),
+]
 # fmt: on
 
 
@@ -74,6 +196,11 @@ def test_containers(steno, parsed):
 @pytest.mark.parametrize("steno, parsed", shorthands)
 def test_shorthands(steno, parsed):
     assert parse(steno) == parsed
+
+
+@pytest.mark.parametrize("steno, parsed", signatures)
+def test_signatures(steno, parsed):
+    assert SIGNATURE.parseString(steno)[0] == parsed
 
 
 def test_tricky_tuples():
