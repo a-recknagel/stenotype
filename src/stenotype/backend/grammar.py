@@ -341,11 +341,11 @@ SIGNATURE = (
         # This does not exactly replicate leading/trailing
         # comma separators, but is much more readable.
         "'(' "
-        "[{[NAME ':'] TYPE ','} '/']"
-        "[{[NAME ':'] TYPE ','}]"
-        "[* [TYPE ',']]"
-        "[{NAME ':' TYPE ','}]"
-        "[** [TYPE]]"
+        "[{[NAME ':'] TYPE ','} '/' ','] "
+        "{[NAME ':'] TYPE ','} "
+        "[* [[NAME ':' ] TYPE] ','] "
+        "{NAME ':' TYPE ','} "
+        "[** [[NAME ':'] TYPE]] "
         "')' '->' TYPE"
     )
     .setParseAction(
