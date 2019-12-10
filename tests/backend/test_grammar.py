@@ -181,6 +181,18 @@ signatures = [
         kwargs=ste.Parameter(name="g", base=ste.Identifier("G")),
         returns=ste.Identifier("R"),
     )),
+    ("(*_) -> R", ste.Signature(
+        positional=(), mixed=(),
+        args=ste.Parameter(name=None, base=ste.Any()),
+        keywords=(), kwargs=None,
+        returns=ste.Identifier("R"),
+    )),
+    ("(...) -> R", ste.Signature(
+        positional=(), mixed=(),
+        args=ste.Parameter(name=None, base=ste.Any()),
+        keywords=(), kwargs=None,
+        returns=ste.Identifier("R"),
+    )),
 ]
 # fmt: on
 
