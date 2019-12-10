@@ -136,21 +136,28 @@ def normalize_shorthand(
 
 @normalize.register(ste.Signature)
 def normalize_signature(element: ste.Signature):
+    # TODO: declare a ``Protocol`` if ``Callable`` is not enough
     return _normalize_callable(element)
 
 
 def _normalize_callable(element: ste.Signature) -> ste.Callable:
-    # typing.Callable can only represent specific positional patterns
     if element.keywords or element.kwargs:
-        raise ValueError("Callable cannot support keyword arguments")
+        raise ValueError("'typing.Callable' does not support keyword arguments")
     if element.args:
+        # args may have a name, but it is inconsequential to the call
+        if not isinstance(element.args.base, ste.Any):
+            raise ValueError(
+                "'typing.Callable' does not support typed variadic arguments"
+            )
         if element.positional or element.mixed:
-            raise ValueError("Callable cannot support required and variadic arguments")
+            raise ValueError(
+                "'typing.Callable' does not support explicit and variadic arguments"
+            )
         return ste.Callable(positional=ste.Dots(), returns=element.returns)
     else:
         # names of arguments may be relevant, do not discard
         if any(arg.name is not None for arg in element.positional + element.mixed):
-            raise ValueError("Callable cannot support named arguments")
+            raise ValueError("'typing.Callable' does not support named arguments")
         return ste.Callable(
             positional=tuple(arg.base for arg in element.positional + element.mixed),
             returns=element.returns,
