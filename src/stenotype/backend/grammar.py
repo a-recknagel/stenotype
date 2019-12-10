@@ -380,9 +380,32 @@ SIGNATURE = (
     )
 )
 
+#: `Callable[..., R]` as `(...) -> R`, alias for ``(*_) -> R``
+SIGNATURE_ANY = (
+    (Suppress("(") + DOTS + Suppress(")") + SIGNATURE_RETURN)
+    .setName("'(' '...' ')' '->' TYPE")
+    .setParseAction(
+        lambda s, loc, toks: ste.Signature(
+            positional=(),
+            mixed=(),
+            args=ste.Parameter(name=None, base=ste.Any()),
+            keywords=(),
+            kwargs=None,
+            returns=toks.returns,
+        )
+    )
+)
+
 #: any valid stenotype expression
 STENOTYPE = MatchFirst(
-    (SIGNATURE, *SPECIALS.exprs, *CONTAINERS.exprs, *LITERALS.exprs, *SHORTHANDS.exprs)
+    (
+        SIGNATURE_ANY,
+        SIGNATURE,
+        *SPECIALS.exprs,
+        *CONTAINERS.exprs,
+        *LITERALS.exprs,
+        *SHORTHANDS.exprs,
+    )
 ).setName("SPECIALS | CONTAINERS | LITERALS | SHORTHANDS")
 
 TYPE << MatchFirst((*STENOTYPE.exprs, *TYPING.exprs))
