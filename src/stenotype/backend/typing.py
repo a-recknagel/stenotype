@@ -5,7 +5,9 @@ from . import elements as ste
 
 
 @singledispatch
-def normalize(element: ste.Steno) -> Union[ste.Dots, ste.Identifier, ste.Generic]:
+def normalize(
+    element: ste.Steno
+) -> Union[ste.Dots, ste.Identifier, ste.Generic, ste.Callable]:
     """Normalize any element representation to the subset supported by typing"""
     raise NotImplementedError(
         f"{element.__class__.__name__!r} cannot be represented via typing yet"
@@ -33,7 +35,7 @@ def normalize_generic(element: ste.Generic) -> ste.Generic:
 
 
 @normalize.register(ste.Callable)
-def normalize_generic(element: ste.Callable) -> ste.Callable:
+def normalize_callable(element: ste.Callable) -> ste.Callable:
     if isinstance(element.positional, ste.Dots):
         return element
     return ste.Callable(
