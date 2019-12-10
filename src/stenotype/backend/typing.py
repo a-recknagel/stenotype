@@ -37,8 +37,7 @@ def normalize_generic(element: ste.Callable) -> ste.Callable:
     if isinstance(element.positional, ste.Dots):
         return element
     return ste.Callable(
-        positional=tuple(map(normalize, element.positional)),
-        returns=element.returns,
+        positional=tuple(map(normalize, element.positional)), returns=element.returns
     )
 
 
