@@ -164,7 +164,9 @@ class Callable(NamedTuple):
     returns: "Steno"
 
 
+#: Any steno element
 Steno = UnionT[
+    Dots,
     Identifier,
     Generic,
     Any,
