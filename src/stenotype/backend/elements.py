@@ -180,4 +180,5 @@ Steno = UnionT[
     AsyncIterable,
     AsyncContext,
     Signature,
+    Callable,
 ]
