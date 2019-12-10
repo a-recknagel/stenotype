@@ -44,9 +44,11 @@ shorthands = [
     ("async with foo", ste.AsyncContext(base=ste.Literal("foo"))),
 ]
 callables = [
-    ("Callable[..., R]", ste.Callable(positional=None, returns=ste.Identifier("R"))),
+    ("Callable[..., R]", ste.Callable(
+        positional=ste.Dots(), returns=ste.Identifier("R")
+    )),
     ("typing.Callable[..., R]", ste.Callable(
-        positional=None, returns=ste.Identifier("R")
+        positional=ste.Dots(), returns=ste.Identifier("R")
     )),
     ("Callable[[A], R]", ste.Callable(
         positional=(ste.Identifier("A"),),

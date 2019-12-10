@@ -67,31 +67,24 @@ GENERIC = (
 CALLABLE_BASE = Optional(Suppress("typing") + Suppress(".")) + Suppress(
     Keyword("Callable")
 )
-#: a partial ``typing.Callable`` expression, such as ``Callable[..., R]``
-CALLABLE_RETURN = (
+#: a ``typing.Callable``, such as ``Callable[[A, B, C], R]`` or ``Callable[..., R]``
+CALLABLE = (
     CALLABLE_BASE
     + Suppress("[")
-    + Suppress("...")
+    + MatchFirst((Suppress("[") + delimitedList(Group(TYPE)) + Suppress("]"), DOTS))
     + Suppress(",")
     + TYPE
     + Suppress("]")
-).setParseAction(lambda s, loc, toks: ste.Callable(None, toks[0]))
-#: a full ``typing.Callable`` expression, such as ``Callable[[A, B, C], R]``
-CALLABLE_POSITIONAL = (
-    CALLABLE_BASE
-    + Suppress("[")
-    + Suppress("[")
-    + delimitedList(Group(TYPE))
-    + Suppress("]")
-    + Suppress(",")
-    + TYPE
-    + Suppress("]")
-).setParseAction(lambda s, loc, toks: ste.Callable(unpack(toks[:-1]), toks[-1]))
+).setParseAction(
+    lambda s, loc, toks: ste.Callable(
+        toks[0] if type(toks[0]) == ste.Dots else unpack(toks[:-1]), toks[-1]
+    )
+)
 
 #: any valid typing expression
-TYPING = MatchFirst(
-    (CALLABLE_RETURN, CALLABLE_POSITIONAL, GENERIC, IDENTIFIER)
-).setName("CALLABLE | GENERIC | IDENTIFIER")
+TYPING = MatchFirst((CALLABLE, GENERIC, IDENTIFIER)).setName(
+    "CALLABLE | GENERIC | IDENTIFIER"
+)
 
 # stenotype expressions
 # =====================

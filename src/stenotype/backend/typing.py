@@ -146,7 +146,7 @@ def _normalize_callable(element: ste.Signature) -> ste.Callable:
     if element.args:
         if element.positional or element.mixed:
             raise ValueError("Callable cannot support required and variadic arguments")
-        return ste.Callable(positional=None, returns=element.returns)
+        return ste.Callable(positional=ste.Dots(), returns=element.returns)
     else:
         # names of arguments may be relevant, do not discard
         if any(arg.name is not None for arg in element.positional + element.mixed):

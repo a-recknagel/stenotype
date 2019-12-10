@@ -34,7 +34,7 @@ def unparse_generic(element: ste.Generic) -> str:
 @unparse.register(ste.Callable)
 def unparse_callable(element: ste.Callable) -> str:
     base = ste.Identifier("typing", "Callable")
-    if element.positional is None:
+    if isinstance(element.positional, ste.Dots):
         return f"{unparse(base)}[..., {unparse(element.returns)}]"
     return (
         f"{unparse(base)}["
