@@ -1,7 +1,7 @@
 import pytest
 
 from stenotype.backend import elements as ste
-from stenotype.backend.grammar import parse, SIGNATURE
+from stenotype.backend.grammar import parse
 
 
 # fmt: off
