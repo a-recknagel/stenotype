@@ -5,7 +5,9 @@ from . import elements as ste
 
 
 @singledispatch
-def normalize(element: ste.Steno) -> Union[ste.Dots, ste.Identifier, ste.Generic]:
+def normalize(
+    element: ste.Steno
+) -> Union[ste.Dots, ste.Identifier, ste.Generic, ste.Callable]:
     """Normalize any element representation to the subset supported by typing"""
     raise NotImplementedError(
         f"{element.__class__.__name__!r} cannot be represented via typing yet"
@@ -29,6 +31,15 @@ def normalize_identity(element: ID) -> ID:
 def normalize_generic(element: ste.Generic) -> ste.Generic:
     return ste.Generic(
         base=element.base, parameters=tuple(map(normalize, element.parameters))
+    )
+
+
+@normalize.register(ste.Callable)
+def normalize_callable(element: ste.Callable) -> ste.Callable:
+    if isinstance(element.positional, ste.Dots):
+        return element
+    return ste.Callable(
+        positional=tuple(map(normalize, element.positional)), returns=element.returns
     )
 
 
@@ -128,3 +139,37 @@ def normalize_shorthand(
     return ste.Generic(
         base=SHORTHAND[type(element)], parameters=(normalize(element.base),)
     )
+
+
+# Callables
+# ---------
+
+
+@normalize.register(ste.Signature)
+def normalize_signature(element: ste.Signature):
+    # TODO: declare a ``Protocol`` if ``Callable`` is not enough
+    return _normalize_callable(element)
+
+
+def _normalize_callable(element: ste.Signature) -> ste.Callable:
+    if element.keywords or element.kwargs:
+        raise ValueError("'typing.Callable' does not support keyword arguments")
+    if element.args:
+        # args may have a name, but it is inconsequential to the call
+        if not isinstance(element.args.base, ste.Any):
+            raise ValueError(
+                "'typing.Callable' does not support typed variadic arguments"
+            )
+        if element.positional or element.mixed:
+            raise ValueError(
+                "'typing.Callable' does not support explicit and variadic arguments"
+            )
+        return ste.Callable(positional=ste.Dots(), returns=element.returns)
+    else:
+        # names of arguments may be relevant, do not discard
+        if any(arg.name is not None for arg in element.positional + element.mixed):
+            raise ValueError("'typing.Callable' does not support named arguments")
+        return ste.Callable(
+            positional=tuple(arg.base for arg in element.positional + element.mixed),
+            returns=element.returns,
+        )

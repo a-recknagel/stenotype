@@ -288,13 +288,21 @@ This can also be used to specify the type of callbacks or higher-order functions
 
           foo: "(str, int) -> int"
 
+If the parameters of the signature are unknown or not relevant,
+use ``...`` for the arguments -- e.g. ``(...) -> int``.
+
 .. note::
 
-    Variadic Arguments:
+    Variadic and Named Arguments:
 
     When the number of arguments is arbitrary, the ``*`` and ``**`` symbols are used.
     Similar to list and dict, the type of *all* variadic arguments is the same; use a
     union if multiple are accepted.
+
+    If names of arguments are part of the signature, these can be annotated similar to
+    dictionary keys. Use ``name: Type`` instead of just ``Type``. Keyword-only
+    arguments are implied by following a ``*`` argument, positional-only arguments
+    by preceding an empty ``/`` argument.
 
     .. content-tabs::
 
@@ -303,7 +311,7 @@ This can also be used to specify the type of callbacks or higher-order functions
 
             .. code-block:: python
 
-              def foo(a: str, *b: int, **c: float) -> int:
+              def foo(a: str, /, b: int, *c: bool, d: bytes, **e: float) -> int:
                   ...
 
         .. tab-container:: variadic_regular
@@ -311,47 +319,21 @@ This can also be used to specify the type of callbacks or higher-order functions
 
             .. code-block:: python
 
-              # TODO
+              class Signature(Protocol):
+                  def __call__(a: str, /, b: int, *c: bool, d: bytes, **c: float) -> int:
+                    ...
+
+              foo: Signature
 
         .. tab-container:: variadic_stenotype
             :title: stenotype
 
             .. code-block:: python
 
-              foo: "(str, *int, **float) -> int"
+              foo: "(str, /, b: int, *c: bool, d: bytes, **float) -> int"
 
-    Named Arguments:
-    
-    If names of arguments are part of the signature, these can be annotated similar to
-    dictionary keys. Use ``name: Type`` instead of just ``Type``; keyword-only
-    arguments are implied by following a ``*`` argument.
-
-    .. content-tabs::
-
-        .. tab-container:: named_value
-            :title: value
-
-            .. code-block:: python
-
-              def foo(a: str, *b: int, c: bool, **d: float) -> int:
-                  ...
-
-        .. tab-container:: named_regular
-            :title: regular
-
-            .. code-block:: python
-
-              # TODO
-
-        .. tab-container:: named_stenotype
-            :title: stenotype
-
-            .. code-block:: python
-
-              foo: "(a: str, *int, c: bool, **float) -> int"
-
-    Names of positional can be ommited; keyword-only arguments must always have a name.
-    Note that variadic arguments never have a name.
+    Names of positional and variadic arguments can be omitted;
+    keyword-only arguments must always have a name.
 
 Common Types
 ''''''''''''

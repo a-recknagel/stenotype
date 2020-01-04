@@ -49,6 +49,75 @@ shorthands = [
     ("typing.AsyncIterable[foo]", ste.AsyncIterable(ste.Identifier("foo"))),
     ("typing.AsyncContextManager[foo]", ste.AsyncContext(ste.Identifier("foo"))),
 ]
+callables = [
+    ("typing.Callable[..., R]", ste.Callable(ste.Dots(), ste.Identifier('R'))),
+    ("typing.Callable[[A], R]", ste.Callable(
+        (ste.Identifier('A'),), ste.Identifier('R'),
+    )),
+    ("typing.Callable[[A, B], R]", ste.Callable(
+        (ste.Identifier('A'), ste.Identifier('B')), ste.Identifier('R'),
+    )),
+]
+callable_signatures = [
+    ("typing.Callable[..., R]", ste.Signature(
+        positional=(), mixed=(), args=ste.Parameter(None, ste.Any()), keywords=(), kwargs=None, returns=ste.Identifier('R'))
+     ),
+    ("typing.Callable[[A, B, C], R]", ste.Signature(
+        positional=(ste.Parameter(None, ste.Identifier('A')), ste.Parameter(None, ste.Identifier('B')), ste.Parameter(None, ste.Identifier('C'))),
+        mixed=(),
+        args=None, keywords=(), kwargs=None, returns=ste.Identifier('R'))
+     ),
+    ("typing.Callable[[A, B, C], R]", ste.Signature(
+        positional=(),
+        mixed=(ste.Parameter(None, ste.Identifier('A')), ste.Parameter(None, ste.Identifier('B')), ste.Parameter(None, ste.Identifier('C'))),
+        args=None, keywords=(), kwargs=None, returns=ste.Identifier('R'))
+     ),
+    ("typing.Callable[[A, B, C], R]", ste.Signature(
+        positional=(ste.Parameter(None, ste.Identifier('A')), ste.Parameter(None, ste.Identifier('B'))),
+        mixed=(ste.Parameter(None, ste.Identifier('C')),),
+        args=None, keywords=(), kwargs=None, returns=ste.Identifier('R'))
+     ),
+]
+protocol_signatures = [
+    ste.Signature(
+        positional=(ste.Parameter(None, ste.Identifier('A')), ste.Parameter('b', ste.Identifier('B'))),
+        mixed=(),
+        args=None, keywords=(), kwargs=None, returns=ste.Identifier('R'),
+    ),
+    ste.Signature(
+        positional=(ste.Parameter(None, ste.Identifier('A')),),
+        mixed=(ste.Parameter('b', ste.Identifier('B')),),
+        args=None, keywords=(), kwargs=None, returns=ste.Identifier('R'),
+    ),
+    ste.Signature(
+        positional=(ste.Parameter(None, ste.Identifier('A')),),
+        mixed=(),
+        args=ste.Parameter(None, ste.Any()), keywords=(), kwargs=None, returns=ste.Identifier('R'),
+    ),
+    ste.Signature(
+        positional=(),
+        mixed=(ste.Parameter(None, ste.Identifier('A')),),
+        args=ste.Parameter(None, ste.Any()), keywords=(), kwargs=None, returns=ste.Identifier('R'),
+    ),
+    ste.Signature(
+        positional=(),
+        mixed=(),
+        args=ste.Parameter(None, ste.Identifier('A')), keywords=(), kwargs=None, returns=ste.Identifier('R'),
+    ),
+    ste.Signature(
+        positional=(),
+        mixed=(),
+        args=ste.Parameter(None, ste.Any()),
+        keywords=(ste.Parameter('a', ste.Identifier('A')),),
+        kwargs=None, returns=ste.Identifier('R'),
+    ),
+    ste.Signature(
+        positional=(),
+        mixed=(),
+        args=ste.Parameter(None, ste.Any()), keywords=(),
+        kwargs=ste.Parameter(None, ste.Any()), returns=ste.Identifier('R'),
+    ),
+]
 # fmt: on
 
 
@@ -75,6 +144,22 @@ def test_containers(typing_type, element):
 @pytest.mark.parametrize("typing_type, element", shorthands)
 def test_shorthands(typing_type, element):
     assert typing_type == unparse(normalize(element))
+
+
+@pytest.mark.parametrize("typing_type, element", callables)
+def test_callables(typing_type, element):
+    assert typing_type == unparse(normalize(element))
+
+
+@pytest.mark.parametrize("typing_type, element", callable_signatures)
+def test_callable_signatures(typing_type, element):
+    assert typing_type == unparse(normalize(element))
+
+
+@pytest.mark.parametrize("element", protocol_signatures)
+def test_protocol_signatures(element):
+    with pytest.raises(ValueError):
+        normalize(element)
 
 
 def test_unknown():

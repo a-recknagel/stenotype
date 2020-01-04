@@ -63,8 +63,28 @@ GENERIC = (
     .setParseAction(lambda s, loc, toks: ste.Generic(toks[0], unpack(toks[1:])))
 )
 
+# TODO: Should we support aliases to ``typing``?
+CALLABLE_BASE = Optional(Suppress("typing") + Suppress(".")) + Suppress(
+    Keyword("Callable")
+)
+#: a ``typing.Callable``, such as ``Callable[[A, B, C], R]`` or ``Callable[..., R]``
+CALLABLE = (
+    CALLABLE_BASE
+    + Suppress("[")
+    + MatchFirst((Suppress("[") + delimitedList(Group(TYPE)) + Suppress("]"), DOTS))
+    + Suppress(",")
+    + TYPE
+    + Suppress("]")
+).setParseAction(
+    lambda s, loc, toks: ste.Callable(
+        toks[0] if type(toks[0]) == ste.Dots else unpack(toks[:-1]), toks[-1]
+    )
+)
+
 #: any valid typing expression
-TYPING = (GENERIC | IDENTIFIER).setName("GENERIC | IDENTIFIER")
+TYPING = MatchFirst((CALLABLE, GENERIC, IDENTIFIER)).setName(
+    "CALLABLE | GENERIC | IDENTIFIER"
+)
 
 # stenotype expressions
 # =====================
@@ -262,9 +282,130 @@ SHORTHANDS = MatchFirst(
     " | ".join(("ITERABLE", "CONTEXT", "AWAITABLE", "ASYNC_ITERABLE", "ASYNC_CONTEXT"))
 )
 
+# Callable
+# ----------
+
+#: `Callable[[A, B], R]` as `(A, B) -> R`
+#: `Protocol.__call__(a: A, b: B, /, c: C, d: D, *args) -> R`
+
+# Parsing the signature is tricky, because delimiters depend on whether
+# two complex elements are joined. The parse rules thus are built from
+# individual complex elements, arranged in various combinations.
+
+# Individual parameters as `A` or `a: A`
+NAME = (~KEYWORDS + Word(alphas)).setName("NAME")
+PARAMETER = (
+    (Optional(NAME + Suppress(":"), default=None) + TYPE)
+    .setName("[NAME ':'] TYPE")
+    .setParseAction(lambda s, loc, toks: ste.Parameter(name=toks[0], base=toks[1]))
+)
+NAMED_PARAMETER = (
+    (NAME + Suppress(":") + TYPE)
+    .setName("NAME ':' TYPE")
+    .setParseAction(lambda s, loc, toks: ste.Parameter(name=toks[0], base=toks[1]))
+)
+
+# Individual parts of the signature
+SIGNATURE_POSITIONAL = (
+    (delimitedList(PARAMETER) + Suppress(",") + Suppress("/"))
+    .setName("[NAME ':'] TYPE {',' [NAME ':'] TYPE} ',' '/'")
+    .setResultsName("positional")
+)
+SIGNATURE_MIXED = (
+    delimitedList(PARAMETER)
+    .setName("[NAME ':'] TYPE {',' [NAME ':'] TYPE}")
+    .setResultsName("mixed")
+)
+SIGNATURE_ARGS = (
+    Suppress("*") + (Optional(PARAMETER, default=None).setResultsName("args"))
+).setName("'*' [TYPE]")
+SIGNATURE_KEYWORDS = (
+    delimitedList(NAMED_PARAMETER)
+    .setName("NAME ':' TYPE {',' NAME ':' TYPE}")
+    .setResultsName("keywords")
+)
+SIGNATURE_KWARGS = (Suppress("**") + Group(PARAMETER).setResultsName("kwargs")).setName(
+    "'**' TYPE"
+)
+SIGNATURE_RETURN = Suppress("->") + TYPE.setResultsName("returns").setName("-> TYPE")
+
+# Match for the entire parameter list
+# This does a recursive ``head + Optional(delimiter + tail) or tail``. This
+# creates any combination of optional tails starting from any head.
+# Based on the Python 3.8 Function Definitions grammar
+PARAMETER_LIST_STARARGS = MatchFirst(
+    (
+        SIGNATURE_ARGS
+        + Optional(Suppress(",") + SIGNATURE_KEYWORDS)
+        + Optional(Suppress(",") + SIGNATURE_KWARGS),
+        SIGNATURE_KWARGS,
+    )
+)
+PARAMETER_LIST_NO_POSONLY = MatchFirst(
+    (
+        SIGNATURE_MIXED + Optional(Suppress(",") + PARAMETER_LIST_STARARGS),
+        PARAMETER_LIST_STARARGS,
+    )
+)
+PARAMETER_LIST = MatchFirst(
+    (
+        SIGNATURE_POSITIONAL + Optional(Suppress(",") + PARAMETER_LIST_NO_POSONLY),
+        PARAMETER_LIST_NO_POSONLY,
+    )
+)
+
+# The actual call signature
+SIGNATURE = (
+    (Suppress("(") + PARAMETER_LIST + Suppress(")") + SIGNATURE_RETURN)
+    .setName(
+        # This does not exactly replicate leading/trailing
+        # comma separators, but is much more readable.
+        "'(' "
+        "[{[NAME ':'] TYPE ','} '/' ','] "
+        "{[NAME ':'] TYPE ','} "
+        "[* [[NAME ':' ] TYPE] ','] "
+        "{NAME ':' TYPE ','} "
+        "[** [[NAME ':'] TYPE]] "
+        "')' '->' TYPE"
+    )
+    .setParseAction(
+        lambda s, loc, toks: ste.Signature(
+            positional=tuple(toks.positional),
+            mixed=tuple(toks.mixed),
+            args=toks.args[0] if toks.args else None,
+            keywords=tuple(toks.keywords),
+            kwargs=toks.kwargs[0] if toks.kwargs else None,
+            returns=toks.returns,
+        )
+    )
+)
+
+#: `Callable[..., R]` as `(...) -> R`, alias for ``(*_) -> R``
+SIGNATURE_ANY = (
+    (Suppress("(") + DOTS + Suppress(")") + SIGNATURE_RETURN)
+    .setName("'(' '...' ')' '->' TYPE")
+    .setParseAction(
+        lambda s, loc, toks: ste.Signature(
+            positional=(),
+            mixed=(),
+            args=ste.Parameter(name=None, base=ste.Any()),
+            keywords=(),
+            kwargs=None,
+            returns=toks.returns,
+        )
+    )
+)
+
 #: any valid stenotype expression
 STENOTYPE = MatchFirst(
-    (*SPECIALS.exprs, *CONTAINERS.exprs, *LITERALS.exprs, *SHORTHANDS.exprs)
+    (
+        SIGNATURE_ANY,
+        SIGNATURE,
+        *SPECIALS.exprs,
+        *CONTAINERS.exprs,
+        *LITERALS.exprs,
+        *SHORTHANDS.exprs,
+    )
 ).setName("SPECIALS | CONTAINERS | LITERALS | SHORTHANDS")
 
 TYPE << MatchFirst((*STENOTYPE.exprs, *TYPING.exprs))
