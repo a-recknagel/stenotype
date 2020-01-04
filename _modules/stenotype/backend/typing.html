@@ -158,7 +158,9 @@
 
 
 <div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.typing.normalize">[docs]</a><span class="nd">@singledispatch</span>
-<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Steno</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span>
+    <span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Steno</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Normalize any element representation to the subset supported by typing&quot;&quot;&quot;</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{element.__class__.__name__!r}</span><span class="s2"> cannot be represented via typing yet&quot;</span>
@@ -182,6 +184,15 @@
 <span class="k">def</span> <span class="nf">normalize_generic</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">(</span>
         <span class="n">base</span><span class="o">=</span><span class="n">element</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">normalize</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="normalize_callable"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.typing.normalize_callable">[docs]</a><span class="nd">@normalize</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">normalize_callable</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">positional</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">element</span>
+    <span class="k">return</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">(</span>
+        <span class="n">positional</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">normalize</span><span class="p">,</span> <span class="n">element</span><span class="o">.</span><span class="n">positional</span><span class="p">)),</span> <span class="n">returns</span><span class="o">=</span><span class="n">element</span><span class="o">.</span><span class="n">returns</span>
     <span class="p">)</span></div>
 
 
@@ -281,6 +292,40 @@
     <span class="k">return</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">(</span>
         <span class="n">base</span><span class="o">=</span><span class="n">SHORTHAND</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">element</span><span class="p">)],</span> <span class="n">parameters</span><span class="o">=</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">base</span><span class="p">),)</span>
     <span class="p">)</span></div>
+
+
+<span class="c1"># Callables</span>
+<span class="c1"># ---------</span>
+
+
+<div class="viewcode-block" id="normalize_signature"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.typing.normalize_signature">[docs]</a><span class="nd">@normalize</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Signature</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">normalize_signature</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+    <span class="c1"># TODO: declare a ``Protocol`` if ``Callable`` is not enough</span>
+    <span class="k">return</span> <span class="n">_normalize_callable</span><span class="p">(</span><span class="n">element</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_normalize_callable</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Signature</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">keywords</span> <span class="ow">or</span> <span class="n">element</span><span class="o">.</span><span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;typing.Callable&#39; does not support keyword arguments&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+        <span class="c1"># args may have a name, but it is inconsequential to the call</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;typing.Callable&#39; does not support typed variadic arguments&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">positional</span> <span class="ow">or</span> <span class="n">element</span><span class="o">.</span><span class="n">mixed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;typing.Callable&#39; does not support explicit and variadic arguments&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">(</span><span class="n">positional</span><span class="o">=</span><span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">(),</span> <span class="n">returns</span><span class="o">=</span><span class="n">element</span><span class="o">.</span><span class="n">returns</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># names of arguments may be relevant, do not discard</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">positional</span> <span class="o">+</span> <span class="n">element</span><span class="o">.</span><span class="n">mixed</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;typing.Callable&#39; does not support named arguments&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">(</span>
+            <span class="n">positional</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">base</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">positional</span> <span class="o">+</span> <span class="n">element</span><span class="o">.</span><span class="n">mixed</span><span class="p">),</span>
+            <span class="n">returns</span><span class="o">=</span><span class="n">element</span><span class="o">.</span><span class="n">returns</span><span class="p">,</span>
+        <span class="p">)</span>
 </pre></div>
 
            </div>

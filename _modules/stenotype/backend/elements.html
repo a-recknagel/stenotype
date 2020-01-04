@@ -164,7 +164,7 @@
 <span class="sd">For example, ``Identifier(&#39;typing&#39;, &#39;List&#39;)`` is not the type :py:class:`typing.List`</span>
 <span class="sd">but represents the name ``typing.List``.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span> <span class="k">as</span> <span class="n">TupleT</span><span class="p">,</span> <span class="n">Union</span> <span class="k">as</span> <span class="n">UnionT</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Tuple</span> <span class="k">as</span> <span class="n">TupleT</span><span class="p">,</span> <span class="n">Union</span> <span class="k">as</span> <span class="n">UnionT</span><span class="p">,</span> <span class="n">Optional</span> <span class="k">as</span> <span class="n">OptionalT</span>
 
 
 <div class="viewcode-block" id="Dots"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Dots">[docs]</a><span class="k">class</span> <span class="nc">Dots</span><span class="p">:</span>
@@ -285,11 +285,46 @@
     <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
 
 
+<div class="viewcode-block" id="Parameter"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Parameter">[docs]</a><span class="k">class</span> <span class="nc">Parameter</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed parameter of a call signature as ``name: base``&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="n">OptionalT</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">base</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+    <span class="c1"># Do we need a default value?</span>
+
+
+<div class="viewcode-block" id="Signature"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Signature">[docs]</a><span class="k">class</span> <span class="nc">Signature</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed signature as ``(p: P, /, m: M, *a: A, k: K, **kw: KW) -&gt; R``&quot;&quot;&quot;</span>
+
+    <span class="c1">#: positional only parameters, e.g. ``(a: A, b:B, /)``</span>
+    <span class="n">positional</span><span class="p">:</span> <span class="n">TupleT</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="c1">#: positional or keyword parameters, e.g. ``(a: A, b: B)``</span>
+    <span class="n">mixed</span><span class="p">:</span> <span class="n">TupleT</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="c1">#: variadic positional parameters, e.g. ``(*args: ARGS)``</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">OptionalT</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]</span>
+    <span class="c1">#: keyword only parameters, e.g. ``(*, a: A, b: B)``</span>
+    <span class="n">keywords</span><span class="p">:</span> <span class="n">TupleT</span><span class="p">[</span><span class="n">Parameter</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="c1">#: variadic keyword parameters, e.g. ``(**kwargs: KWARGS)``</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">OptionalT</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]</span>
+    <span class="c1">#: return type, e.g. ``() -&gt; R``</span>
+    <span class="n">returns</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<div class="viewcode-block" id="Callable"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.elements.Callable">[docs]</a><span class="k">class</span> <span class="nc">Callable</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Typed positional signature as ``(A, B, /, C, D) -&gt; R``&quot;&quot;&quot;</span>
+
+    <span class="n">positional</span><span class="p">:</span> <span class="s2">&quot;UnionT[TupleT[Steno, ...], Dots]&quot;</span>
+    <span class="n">returns</span><span class="p">:</span> <span class="s2">&quot;Steno&quot;</span></div>
+
+
+<span class="c1">#: Any steno element</span>
 <span class="n">Steno</span> <span class="o">=</span> <span class="n">UnionT</span><span class="p">[</span>
+    <span class="n">Dots</span><span class="p">,</span>
     <span class="n">Identifier</span><span class="p">,</span>
     <span class="n">Generic</span><span class="p">,</span>
     <span class="n">Any</span><span class="p">,</span>
     <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
     <span class="n">List</span><span class="p">,</span>
     <span class="n">Dict</span><span class="p">,</span>
     <span class="n">Set</span><span class="p">,</span>
@@ -299,6 +334,8 @@
     <span class="n">Awaitable</span><span class="p">,</span>
     <span class="n">AsyncIterable</span><span class="p">,</span>
     <span class="n">AsyncContext</span><span class="p">,</span>
+    <span class="n">Signature</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 

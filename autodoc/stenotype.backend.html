@@ -184,7 +184,7 @@
 Each element holds the relevant information for both a <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> and
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code> conversion.</p>
 <p>Note that all elements are represented as values, not types:
-A <code class="xref py py-class docutils literal notranslate"><span class="pre">Steno</span></code> encodes <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> syntax/code,
+A <a class="reference internal" href="#stenotype.backend.elements.Steno" title="stenotype.backend.elements.Steno"><code class="xref py py-class docutils literal notranslate"><span class="pre">Steno</span></code></a> encodes <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> syntax/code,
 not any concrete types.
 For example, <code class="docutils literal notranslate"><span class="pre">Identifier('typing',</span> <span class="pre">'List')</span></code> is not the type <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.List</span></code>
 but represents the name <code class="docutils literal notranslate"><span class="pre">typing.List</span></code>.</p>
@@ -384,13 +384,134 @@ but represents the name <code class="docutils literal notranslate"><span class="
 
 </dd></dl>
 
+<dl class="class">
+<dt id="stenotype.backend.elements.Parameter">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Parameter</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed parameter of a call signature as <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">base</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Parameter.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#stenotype.backend.elements.Parameter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Parameter.base">
+<em class="property">property </em><code class="sig-name descname">base</code><a class="headerlink" href="#stenotype.backend.elements.Parameter.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Signature">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Signature</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed signature as <code class="docutils literal notranslate"><span class="pre">(p:</span> <span class="pre">P,</span> <span class="pre">/,</span> <span class="pre">m:</span> <span class="pre">M,</span> <span class="pre">*a:</span> <span class="pre">A,</span> <span class="pre">k:</span> <span class="pre">K,</span> <span class="pre">**kw:</span> <span class="pre">KW)</span> <span class="pre">-&gt;</span> <span class="pre">R</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Signature.positional">
+<em class="property">property </em><code class="sig-name descname">positional</code><a class="headerlink" href="#stenotype.backend.elements.Signature.positional" title="Permalink to this definition">¶</a></dt>
+<dd><p>B, /)``</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>positional only parameters, e.g. <a href="#id1"><span class="problematic" id="id2">``</span></a>(a</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>A, b</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Signature.mixed">
+<em class="property">property </em><code class="sig-name descname">mixed</code><a class="headerlink" href="#stenotype.backend.elements.Signature.mixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>B)``</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>positional or keyword parameters, e.g. <a href="#id3"><span class="problematic" id="id4">``</span></a>(a</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>A, b</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Signature.args">
+<em class="property">property </em><code class="sig-name descname">args</code><a class="headerlink" href="#stenotype.backend.elements.Signature.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>ARGS)``</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>variadic positional parameters, e.g. <a href="#id5"><span class="problematic" id="id6">``</span></a>(<a href="#id7"><span class="problematic" id="id8">*</span></a>args</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Signature.keywords">
+<em class="property">property </em><code class="sig-name descname">keywords</code><a class="headerlink" href="#stenotype.backend.elements.Signature.keywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>B)``</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>keyword only parameters, e.g. <a href="#id9"><span class="problematic" id="id10">``</span></a>(<a href="#id11"><span class="problematic" id="id12">*</span></a>, a</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>A, b</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Signature.kwargs">
+<em class="property">property </em><code class="sig-name descname">kwargs</code><a class="headerlink" href="#stenotype.backend.elements.Signature.kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>KWARGS)``</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>variadic keyword parameters, e.g. <a href="#id13"><span class="problematic" id="id14">``</span></a>(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Signature.returns">
+<em class="property">property </em><code class="sig-name descname">returns</code><a class="headerlink" href="#stenotype.backend.elements.Signature.returns" title="Permalink to this definition">¶</a></dt>
+<dd><p>return type, e.g. <code class="docutils literal notranslate"><span class="pre">()</span> <span class="pre">-&gt;</span> <span class="pre">R</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stenotype.backend.elements.Callable">
+<em class="property">class </em><code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Callable</code><a class="reference internal" href="../_modules/stenotype/backend/elements.html#Callable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.elements.Callable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Typed positional signature as <code class="docutils literal notranslate"><span class="pre">(A,</span> <span class="pre">B,</span> <span class="pre">/,</span> <span class="pre">C,</span> <span class="pre">D)</span> <span class="pre">-&gt;</span> <span class="pre">R</span></code></p>
+<dl class="method">
+<dt id="stenotype.backend.elements.Callable.positional">
+<em class="property">property </em><code class="sig-name descname">positional</code><a class="headerlink" href="#stenotype.backend.elements.Callable.positional" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stenotype.backend.elements.Callable.returns">
+<em class="property">property </em><code class="sig-name descname">returns</code><a class="headerlink" href="#stenotype.backend.elements.Callable.returns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="stenotype.backend.elements.Steno">
+<code class="sig-prename descclassname">stenotype.backend.elements.</code><code class="sig-name descname">Steno</code><em class="property"> = typing.Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><a class="headerlink" href="#stenotype.backend.elements.Steno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Any steno element</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-stenotype.backend.grammar">
 <span id="stenotype-backend-grammar-module"></span><h2>stenotype.backend.grammar module<a class="headerlink" href="#module-stenotype.backend.grammar" title="Permalink to this headline">¶</a></h2>
 <p>Grammar for parsing <a class="reference internal" href="stenotype.html#module-stenotype" title="stenotype"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stenotype</span></code></a> strings to <a class="reference internal" href="#module-stenotype.backend.elements" title="stenotype.backend.elements"><code class="xref py py-mod docutils literal notranslate"><span class="pre">elements</span></code></a></p>
 <dl class="function">
 <dt id="stenotype.backend.grammar.parse">
-<code class="sig-prename descclassname">stenotype.backend.grammar.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">steno_string: str</em><span class="sig-paren">)</span> &#x2192; Union[stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]<a class="reference internal" href="../_modules/stenotype/backend/grammar.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.grammar.parse" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">stenotype.backend.grammar.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">steno_string: str</em><span class="sig-paren">)</span> &#x2192; Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]<a class="reference internal" href="../_modules/stenotype/backend/grammar.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.grammar.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a stenotype or typing string to element representation</p>
 </dd></dl>
 
@@ -399,7 +520,7 @@ but represents the name <code class="docutils literal notranslate"><span class="
 <span id="stenotype-backend-steno-module"></span><h2>stenotype.backend.steno module<a class="headerlink" href="#module-stenotype.backend.steno" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="stenotype.backend.steno.unparse">
-<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unparse element representation to a stenotype string</p>
 </dd></dl>
 
@@ -416,6 +537,11 @@ but represents the name <code class="docutils literal notranslate"><span class="
 <dl class="function">
 <dt id="stenotype.backend.steno.unparse_generic">
 <code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_generic</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Generic</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_generic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.steno.unparse_callable">
+<code class="sig-prename descclassname">stenotype.backend.steno.</code><code class="sig-name descname">unparse_callable</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Callable</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="../_modules/stenotype/backend/steno.html#unparse_callable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.steno.unparse_callable" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -468,7 +594,7 @@ but represents the name <code class="docutils literal notranslate"><span class="
 <span id="stenotype-backend-typing-module"></span><h2>stenotype.backend.typing module<a class="headerlink" href="#module-stenotype.backend.typing" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="stenotype.backend.typing.normalize">
-<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><span class="sig-paren">)</span> &#x2192; Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier]<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier, stenotype.backend.elements.Any]</em><span class="sig-paren">)</span> &#x2192; Union[stenotype.backend.elements.Dots, stenotype.backend.elements.Identifier]<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize any element representation to the subset supported by typing</p>
 </dd></dl>
 
@@ -480,6 +606,11 @@ but represents the name <code class="docutils literal notranslate"><span class="
 <dl class="function">
 <dt id="stenotype.backend.typing.normalize_generic">
 <code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_generic</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Generic</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_generic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_callable">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_callable</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Callable</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Callable<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_callable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_callable" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -525,6 +656,11 @@ but represents the name <code class="docutils literal notranslate"><span class="
 <dl class="function">
 <dt id="stenotype.backend.typing.normalize_shorthand">
 <code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_shorthand</code><span class="sig-paren">(</span><em class="sig-param">element: Union[stenotype.backend.elements.Iterable, stenotype.backend.elements.Context, stenotype.backend.elements.Awaitable, stenotype.backend.elements.AsyncIterable, stenotype.backend.elements.AsyncContext]</em><span class="sig-paren">)</span> &#x2192; stenotype.backend.elements.Generic<a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_shorthand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_shorthand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="stenotype.backend.typing.normalize_signature">
+<code class="sig-prename descclassname">stenotype.backend.typing.</code><code class="sig-name descname">normalize_signature</code><span class="sig-paren">(</span><em class="sig-param">element: stenotype.backend.elements.Signature</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stenotype/backend/typing.html#normalize_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stenotype.backend.typing.normalize_signature" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

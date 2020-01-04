@@ -184,6 +184,18 @@
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;{unparse(element.base)}[{&quot;, &quot;.join(map(unparse, element.parameters))}]&#39;</span></div>
 
 
+<div class="viewcode-block" id="unparse_callable"><a class="viewcode-back" href="../../../autodoc/stenotype.backend.html#stenotype.backend.steno.unparse_callable">[docs]</a><span class="nd">@unparse</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unparse_callable</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">ste</span><span class="o">.</span><span class="n">Identifier</span><span class="p">(</span><span class="s2">&quot;typing&quot;</span><span class="p">,</span> <span class="s2">&quot;Callable&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">positional</span><span class="p">,</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dots</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;{unparse(base)}[..., {unparse(element.returns)}]&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;{unparse(base)}[&quot;</span>
+        <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;[{&quot;, &quot;.join(map(unparse, element.positional))}]&#39;</span>
+        <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;, {unparse(element.returns)}]&quot;</span>
+    <span class="p">)</span></div>
+
+
 <span class="c1"># stenotype expressions</span>
 <span class="c1"># =====================</span>
 

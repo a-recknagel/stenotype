@@ -216,8 +216,28 @@
     <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Generic</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unpack</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
 <span class="p">)</span>
 
+<span class="c1"># TODO: Should we support aliases to ``typing``?</span>
+<span class="n">CALLABLE_BASE</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;typing&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span>
+    <span class="n">Keyword</span><span class="p">(</span><span class="s2">&quot;Callable&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1">#: a ``typing.Callable``, such as ``Callable[[A, B, C], R]`` or ``Callable[..., R]``</span>
+<span class="n">CALLABLE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">CALLABLE_BASE</span>
+    <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">delimitedList</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">TYPE</span><span class="p">))</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">),</span> <span class="n">DOTS</span><span class="p">))</span>
+    <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    <span class="o">+</span> <span class="n">TYPE</span>
+    <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Callable</span><span class="p">(</span>
+        <span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="n">ste</span><span class="o">.</span><span class="n">Dots</span> <span class="k">else</span> <span class="n">unpack</span><span class="p">(</span><span class="n">toks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">toks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
 <span class="c1">#: any valid typing expression</span>
-<span class="n">TYPING</span> <span class="o">=</span> <span class="p">(</span><span class="n">GENERIC</span> <span class="o">|</span> <span class="n">IDENTIFIER</span><span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;GENERIC | IDENTIFIER&quot;</span><span class="p">)</span>
+<span class="n">TYPING</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="n">CALLABLE</span><span class="p">,</span> <span class="n">GENERIC</span><span class="p">,</span> <span class="n">IDENTIFIER</span><span class="p">))</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span>
+    <span class="s2">&quot;CALLABLE | GENERIC | IDENTIFIER&quot;</span>
+<span class="p">)</span>
 
 <span class="c1"># stenotype expressions</span>
 <span class="c1"># =====================</span>
@@ -415,9 +435,130 @@
     <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s2">&quot;ITERABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;CONTEXT&quot;</span><span class="p">,</span> <span class="s2">&quot;AWAITABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;ASYNC_ITERABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;ASYNC_CONTEXT&quot;</span><span class="p">))</span>
 <span class="p">)</span>
 
+<span class="c1"># Callable</span>
+<span class="c1"># ----------</span>
+
+<span class="c1">#: `Callable[[A, B], R]` as `(A, B) -&gt; R`</span>
+<span class="c1">#: `Protocol.__call__(a: A, b: B, /, c: C, d: D, *args) -&gt; R`</span>
+
+<span class="c1"># Parsing the signature is tricky, because delimiters depend on whether</span>
+<span class="c1"># two complex elements are joined. The parse rules thus are built from</span>
+<span class="c1"># individual complex elements, arranged in various combinations.</span>
+
+<span class="c1"># Individual parameters as `A` or `a: A`</span>
+<span class="n">NAME</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">KEYWORDS</span> <span class="o">+</span> <span class="n">Word</span><span class="p">(</span><span class="n">alphas</span><span class="p">))</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;NAME&quot;</span><span class="p">)</span>
+<span class="n">PARAMETER</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Optional</span><span class="p">(</span><span class="n">NAME</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;[NAME &#39;:&#39;] TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+<span class="n">NAMED_PARAMETER</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">NAME</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;NAME &#39;:&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="n">toks</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="p">)</span>
+
+<span class="c1"># Individual parts of the signature</span>
+<span class="n">SIGNATURE_POSITIONAL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">delimitedList</span><span class="p">(</span><span class="n">PARAMETER</span><span class="p">)</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;[NAME &#39;:&#39;] TYPE {&#39;,&#39; [NAME &#39;:&#39;] TYPE} &#39;,&#39; &#39;/&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s2">&quot;positional&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">SIGNATURE_MIXED</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">delimitedList</span><span class="p">(</span><span class="n">PARAMETER</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;[NAME &#39;:&#39;] TYPE {&#39;,&#39; [NAME &#39;:&#39;] TYPE}&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s2">&quot;mixed&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">SIGNATURE_ARGS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">Optional</span><span class="p">(</span><span class="n">PARAMETER</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">))</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;*&#39; [TYPE]&quot;</span><span class="p">)</span>
+<span class="n">SIGNATURE_KEYWORDS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">delimitedList</span><span class="p">(</span><span class="n">NAMED_PARAMETER</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;NAME &#39;:&#39; TYPE {&#39;,&#39; NAME &#39;:&#39; TYPE}&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s2">&quot;keywords&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">SIGNATURE_KWARGS</span> <span class="o">=</span> <span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;**&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Group</span><span class="p">(</span><span class="n">PARAMETER</span><span class="p">)</span><span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s2">&quot;kwargs&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span>
+    <span class="s2">&quot;&#39;**&#39; TYPE&quot;</span>
+<span class="p">)</span>
+<span class="n">SIGNATURE_RETURN</span> <span class="o">=</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">TYPE</span><span class="o">.</span><span class="n">setResultsName</span><span class="p">(</span><span class="s2">&quot;returns&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;-&gt; TYPE&quot;</span><span class="p">)</span>
+
+<span class="c1"># Match for the entire parameter list</span>
+<span class="c1"># This does a recursive ``head + Optional(delimiter + tail) or tail``. This</span>
+<span class="c1"># creates any combination of optional tails starting from any head.</span>
+<span class="c1"># Based on the Python 3.8 Function Definitions grammar</span>
+<span class="n">PARAMETER_LIST_STARARGS</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">SIGNATURE_ARGS</span>
+        <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">SIGNATURE_KEYWORDS</span><span class="p">)</span>
+        <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">SIGNATURE_KWARGS</span><span class="p">),</span>
+        <span class="n">SIGNATURE_KWARGS</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">PARAMETER_LIST_NO_POSONLY</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">SIGNATURE_MIXED</span> <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">PARAMETER_LIST_STARARGS</span><span class="p">),</span>
+        <span class="n">PARAMETER_LIST_STARARGS</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">PARAMETER_LIST</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
+    <span class="p">(</span>
+        <span class="n">SIGNATURE_POSITIONAL</span> <span class="o">+</span> <span class="n">Optional</span><span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">PARAMETER_LIST_NO_POSONLY</span><span class="p">),</span>
+        <span class="n">PARAMETER_LIST_NO_POSONLY</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># The actual call signature</span>
+<span class="n">SIGNATURE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">PARAMETER_LIST</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">SIGNATURE_RETURN</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span>
+        <span class="c1"># This does not exactly replicate leading/trailing</span>
+        <span class="c1"># comma separators, but is much more readable.</span>
+        <span class="s2">&quot;&#39;(&#39; &quot;</span>
+        <span class="s2">&quot;[{[NAME &#39;:&#39;] TYPE &#39;,&#39;} &#39;/&#39; &#39;,&#39;] &quot;</span>
+        <span class="s2">&quot;{[NAME &#39;:&#39;] TYPE &#39;,&#39;} &quot;</span>
+        <span class="s2">&quot;[* [[NAME &#39;:&#39; ] TYPE] &#39;,&#39;] &quot;</span>
+        <span class="s2">&quot;{NAME &#39;:&#39; TYPE &#39;,&#39;} &quot;</span>
+        <span class="s2">&quot;[** [[NAME &#39;:&#39;] TYPE]] &quot;</span>
+        <span class="s2">&quot;&#39;)&#39; &#39;-&gt;&#39; TYPE&quot;</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Signature</span><span class="p">(</span>
+            <span class="n">positional</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">toks</span><span class="o">.</span><span class="n">positional</span><span class="p">),</span>
+            <span class="n">mixed</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">toks</span><span class="o">.</span><span class="n">mixed</span><span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="n">toks</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">toks</span><span class="o">.</span><span class="n">args</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">toks</span><span class="o">.</span><span class="n">keywords</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="n">toks</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">toks</span><span class="o">.</span><span class="n">kwargs</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">returns</span><span class="o">=</span><span class="n">toks</span><span class="o">.</span><span class="n">returns</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1">#: `Callable[..., R]` as `(...) -&gt; R`, alias for ``(*_) -&gt; R``</span>
+<span class="n">SIGNATURE_ANY</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">DOTS</span> <span class="o">+</span> <span class="n">Suppress</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">SIGNATURE_RETURN</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;&#39;(&#39; &#39;...&#39; &#39;)&#39; &#39;-&gt;&#39; TYPE&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">setParseAction</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">toks</span><span class="p">:</span> <span class="n">ste</span><span class="o">.</span><span class="n">Signature</span><span class="p">(</span>
+            <span class="n">positional</span><span class="o">=</span><span class="p">(),</span>
+            <span class="n">mixed</span><span class="o">=</span><span class="p">(),</span>
+            <span class="n">args</span><span class="o">=</span><span class="n">ste</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">ste</span><span class="o">.</span><span class="n">Any</span><span class="p">()),</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">(),</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">returns</span><span class="o">=</span><span class="n">toks</span><span class="o">.</span><span class="n">returns</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
 <span class="c1">#: any valid stenotype expression</span>
 <span class="n">STENOTYPE</span> <span class="o">=</span> <span class="n">MatchFirst</span><span class="p">(</span>
-    <span class="p">(</span><span class="o">*</span><span class="n">SPECIALS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">CONTAINERS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">LITERALS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">SHORTHANDS</span><span class="o">.</span><span class="n">exprs</span><span class="p">)</span>
+    <span class="p">(</span>
+        <span class="n">SIGNATURE_ANY</span><span class="p">,</span>
+        <span class="n">SIGNATURE</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">SPECIALS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">CONTAINERS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">LITERALS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">SHORTHANDS</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span>
+    <span class="p">)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;SPECIALS | CONTAINERS | LITERALS | SHORTHANDS&quot;</span><span class="p">)</span>
 
 <span class="n">TYPE</span> <span class="o">&lt;&lt;</span> <span class="n">MatchFirst</span><span class="p">((</span><span class="o">*</span><span class="n">STENOTYPE</span><span class="o">.</span><span class="n">exprs</span><span class="p">,</span> <span class="o">*</span><span class="n">TYPING</span><span class="o">.</span><span class="n">exprs</span><span class="p">))</span>
